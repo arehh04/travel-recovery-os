@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  tros-api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - TR_OS_API_HOST=0.0.0.0
+      - TR_OS_API_PORT=8000
+      - TR_OS_CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped

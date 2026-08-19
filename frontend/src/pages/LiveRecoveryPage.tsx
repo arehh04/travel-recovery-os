@@ -1,4 +1,4 @@
-/** Live Recovery page — stitch radar ring + timeline, dynamic from API. */
+/** Live Recovery page — stitch radar ring + timeline, with error handling. */
 
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -31,6 +31,13 @@ export function LiveRecoveryPage() {
   const destination = request?.destination || '';
   const date = request?.departure_date || '';
 
+  // Redirect to home if no request data (e.g., direct URL access)
+  useEffect(() => {
+    if (!request) {
+      navigate('/', { replace: true });
+    }
+  }, [request, navigate]);
+
   // Start mission on mount
   useEffect(() => {
     if (initRef.current || !request) return;
@@ -50,6 +57,9 @@ export function LiveRecoveryPage() {
     if (state.phase === 'idle' || state.phase === 'submitting' || state.phase === 'queued') {
       return PHASE_STEPS.map((s, i) => ({ ...s, state: i === 0 ? 'current' : 'pending' }));
     }
+    if (state.phase === 'error') {
+      return PHASE_STEPS.map((s) => ({ ...s, state: 'pending' }));
+    }
     const currentPhase = state.phase === 'running' ? state.status?.phase : 'VALIDATE';
     const currentIndex = Math.max(0, PHASE_ORDER.indexOf(currentPhase || 'CONTEXT'));
     return PHASE_STEPS.map((s, i) => ({
@@ -59,14 +69,70 @@ export function LiveRecoveryPage() {
   };
 
   const steps = getSteps();
-  const offers = state.phase === 'running' ? state.status?.phase === 'SEARCH' ? 12 : 23 : 0;
-  const missionId = state.phase === 'running' || state.phase === 'queued' || state.phase === 'cancelling' ? state.missionId : undefined;
+  const isRunning = state.phase === 'running' || state.phase === 'queued';
+  const isSubmitting = state.phase === 'submitting' || state.phase === 'idle';
+  const isError = state.phase === 'error';
+  const missionId = isRunning ? state.missionId : undefined;
+  const offers = state.phase === 'running' ? (state.status?.phase === 'FLIGHT_SEARCH' ? 12 : 23) : 0;
+
+  // ERROR STATE — show error message with retry button
+  if (isError) {
+    return (
+      <main className="flex-1 w-full max-w-xl mx-auto px-container-margin py-stack-lg flex flex-col gap-6 items-center justify-center min-h-[60vh]">
+        <div className="bg-surface-container-lowest border border-error-container rounded-xl p-8 flex flex-col items-center gap-6 shadow-lg max-w-md w-full text-center">
+          <div className="w-16 h-16 rounded-full bg-error-container text-error-container flex items-center justify-center">
+            <span className="material-symbols-outlined text-[32px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+              error
+            </span>
+          </div>
+          <div>
+            <h1 className="font-headline-md text-headline-md text-on-surface mb-2">Recovery Failed</h1>
+            <p className="font-body-md text-body-md text-on-surface-variant">
+              {state.message || 'An unexpected error occurred while starting your recovery mission.'}
+            </p>
+          </div>
+          {origin && destination && (
+            <div className="bg-surface rounded-lg px-4 py-2 text-sm text-on-surface-variant flex items-center gap-2">
+              <span className="material-symbols-outlined text-[16px] text-primary">flight_takeoff</span>
+              {origin} <span className="material-symbols-outlined text-[16px]">arrow_right_alt</span> {destination}
+              {date && <span className="text-on-surface-variant">· {date}</span>}
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/', { replace: true })}
+              className="bg-primary-container text-on-primary hover:bg-primary-container/90 font-label-md text-label-md px-6 py-3 rounded-lg flex items-center gap-2 transition-all active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+              Back to Home
+            </button>
+            <button
+              onClick={() => {
+                initRef.current = false;
+                if (request) {
+                  createMission(request);
+                } else {
+                  navigate('/');
+                }
+              }}
+              className="border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md px-6 py-3 rounded-lg flex items-center gap-2 transition-all active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[20px]">refresh</span>
+              Try Again
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex-1 w-full max-w-xl mx-auto px-container-margin py-stack-lg flex flex-col gap-stack-lg relative z-10 pb-32">
       {/* Header */}
       <header className="flex flex-col items-center text-center gap-stack-sm mb-2">
-        <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Assisting with your recovery</h1>
+        <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+          {isSubmitting ? 'Starting your recovery...' : 'Assisting with your recovery'}
+        </h1>
         <div className="flex items-center gap-2 text-on-secondary-container font-label-md text-label-md bg-secondary-container px-4 py-2 rounded-full border border-outline-variant/50">
           <span className="material-symbols-outlined text-[16px] text-primary">flight_takeoff</span>
           <span>Mission: {origin} <span className="material-symbols-outlined text-[16px] align-middle px-1">arrow_right_alt</span> {destination}{date ? `, ${date}` : ''}</span>
@@ -85,15 +151,19 @@ export function LiveRecoveryPage() {
             <circle cx="50" cy="50" fill="none" r="46" stroke="currentColor" strokeWidth="6"></circle>
           </svg>
           <div className="bg-surface-container-lowest rounded-full p-3 shadow-sm z-10">
-            <span className="material-symbols-outlined text-primary text-4xl animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>radar</span>
+            <span className="material-symbols-outlined text-primary text-4xl animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>
+              {isSubmitting ? 'hourglass_top' : 'radar'}
+            </span>
           </div>
         </div>
         <div className="text-center z-10 flex flex-col gap-2">
-          <h2 className="font-headline-md text-headline-md text-primary">Searching live flight options</h2>
+          <h2 className="font-headline-md text-headline-md text-primary">
+            {isSubmitting ? 'Connecting to recovery engine...' : 'Searching live flight options'}
+          </h2>
           <p className="font-body-md text-body-md text-on-surface-variant flex items-center justify-center gap-2 relative">
             <span className="w-2 h-2 rounded-full bg-primary animate-ping absolute opacity-75"></span>
             <span className="w-2 h-2 rounded-full bg-primary"></span>
-            {offers} live offers found
+            {isSubmitting ? 'Preparing your mission' : `${offers} live offers found`}
           </p>
         </div>
       </section>

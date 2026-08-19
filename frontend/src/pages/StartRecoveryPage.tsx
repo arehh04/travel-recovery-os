@@ -1,4 +1,4 @@
-/** Start Recovery page — stitch home page with dynamic form. */
+/** Start Recovery page — stitch home page with dynamic form + validation. */
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,56 @@ interface Props {
   defaultDate?: string;
   defaultBudget?: number;
   defaultCurrency?: string;
+}
+
+// Common airport name → IATA code mapping for user-friendly input
+const AIRPORT_MAP: Record<string, string> = {
+  // Kuala Lumpur
+  'kuala lumpur': 'KUL', 'klia': 'KUL', 'kul': 'KUL',
+  // Singapore
+  'singapore': 'SIN', 'changi': 'SIN', 'sin': 'SIN',
+  // Tokyo
+  'tokyo': 'NRT', 'narita': 'NRT', 'nrt': 'NRT', 'haneda': 'HND', 'hnd': 'HND',
+  // Bangkok
+  'bangkok': 'BKK', 'suvarnabhumi': 'BKK', 'bkk': 'BKK', 'dmk': 'DMK', 'don mueang': 'DMK',
+  // Hong Kong
+  'hong kong': 'HKG', 'hkg': 'HKG',
+  // London
+  'london': 'LHR', 'heathrow': 'LHR', 'lhr': 'LHR', 'lgw': 'LGW', 'gatwick': 'LGW',
+  // New York
+  'new york': 'JFK', 'jfk': 'JFK', 'lga': 'LGA', 'la guardia': 'LGA', 'newark': 'EWR', 'ewr': 'EWR',
+  // Other common
+  'osaka': 'KIX', 'kix': 'KIX', 'seoul': 'ICN', 'icn': 'ICN', 'taipei': 'TPE', 'tpe': 'TPE',
+  'sydney': 'SYD', 'syd': 'SYD', 'melbourne': 'MEL', 'mel': 'MEL',
+  'bali': 'DPS', 'denpasar': 'DPS', 'dps': 'DPS',
+  'penang': 'PEN', 'pen': 'PEN', 'kota kinabalu': 'BKI', 'bki': 'BKI',
+  'jakarta': 'CGK', 'cgk': 'CGK', 'manila': 'MNL', 'mnl': 'MNL',
+  'shanghai': 'PVG', 'pvg': 'PVG', 'beijing': 'PEK', 'pek': 'PEK',
+  'delhi': 'DEL', 'del': 'DEL', 'mumbai': 'BOM', 'bom': 'BOM',
+  'paris': 'CDG', 'cdg': 'CDG', 'dubai': 'DXB', 'dxb': 'DXB',
+  'istanbul': 'IST', 'ist': 'IST', 'frankfurt': 'FRA', 'fra': 'FRA',
+  'amsterdam': 'AMS', 'ams': 'AMS',
+};
+
+function resolveIATA(input: string): string | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  // If already 3 uppercase letters, use as-is
+  if (/^[A-Z]{3}$/.test(trimmed.toUpperCase())) {
+    return trimmed.toUpperCase();
+  }
+  // Try city/airport name lookup
+  const lower = trimmed.toLowerCase();
+  if (AIRPORT_MAP[lower]) {
+    return AIRPORT_MAP[lower];
+  }
+  // Try partial match
+  for (const [name, code] of Object.entries(AIRPORT_MAP)) {
+    if (name.includes(lower) || lower.includes(name)) {
+      return code;
+    }
+  }
+  return null;
 }
 
 export function StartRecoveryPage({
@@ -26,11 +76,48 @@ export function StartRecoveryPage({
   const [travelers, setTravelers] = useState(1);
   const [budget, setBudget] = useState(defaultBudget);
   const [currency, setCurrency] = useState(defaultCurrency);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = (): { valid: boolean; originCode: string | null; destCode: string | null } => {
+    const newErrors: Record<string, string> = {};
+
+    const originCode = resolveIATA(origin);
+    if (!origin) {
+      newErrors.origin = 'Origin is required';
+    } else if (!originCode) {
+      newErrors.origin = 'Enter a valid airport code (e.g., KUL) or city name (e.g., Kuala Lumpur)';
+    }
+
+    const destCode = resolveIATA(destination);
+    if (!destination) {
+      newErrors.destination = 'Destination is required';
+    } else if (!destCode) {
+      newErrors.destination = 'Enter a valid airport code (e.g., SIN) or city name (e.g., Singapore)';
+    }
+
+    if (originCode && destCode && originCode === destCode) {
+      newErrors.destination = 'Destination must be different from origin';
+    }
+
+    if (!date) {
+      newErrors.date = 'Date is required';
+    }
+
+    if (budget <= 0) {
+      newErrors.budget = 'Budget must be greater than 0';
+    }
+
+    setErrors(newErrors);
+    return { valid: Object.keys(newErrors).length === 0, originCode, destCode };
+  };
 
   const handleSubmit = () => {
+    const { valid, originCode, destCode } = validate();
+    if (!valid || !originCode || !destCode) return;
+
     const request: MissionRequest = {
-      origin,
-      destination,
+      origin: originCode,
+      destination: destCode,
       departure_date: date,
       traveler_count: travelers,
       currency,
@@ -75,13 +162,14 @@ export function StartRecoveryPage({
                   <span className="material-symbols-outlined text-[16px]">flight_takeoff</span> Origin
                 </label>
                 <input
-                  className="tr-input font-numeric-data text-numeric-data uppercase"
-                  placeholder="City or Airport"
+                  className={`tr-input font-numeric-data text-numeric-data uppercase ${errors.origin ? 'border-error' : ''}`}
+                  placeholder="City or Airport (e.g., KUL)"
                   type="text"
                   value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
+                  onChange={(e) => { setOrigin(e.target.value); if (errors.origin) setErrors({ ...errors, origin: '' }); }}
                   data-testid="origin-input"
                 />
+                {errors.origin && <p className="text-error text-sm font-label-sm">{errors.origin}</p>}
               </div>
               <div className="hidden md:flex w-10 h-10 items-center justify-center rounded-full bg-surface-container border border-outline-variant/30 text-on-surface-variant mt-6">
                 <span className="material-symbols-outlined">arrow_right_alt</span>
@@ -91,13 +179,14 @@ export function StartRecoveryPage({
                   <span className="material-symbols-outlined text-[16px]">flight_land</span> Destination
                 </label>
                 <input
-                  className="tr-input font-numeric-data text-numeric-data uppercase"
-                  placeholder="City or Airport"
+                  className={`tr-input font-numeric-data text-numeric-data uppercase ${errors.destination ? 'border-error' : ''}`}
+                  placeholder="City or Airport (e.g., SIN)"
                   type="text"
                   value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
+                  onChange={(e) => { setDestination(e.target.value); if (errors.destination) setErrors({ ...errors, destination: '' }); }}
                   data-testid="destination-input"
                 />
+                {errors.destination && <p className="text-error text-sm font-label-sm">{errors.destination}</p>}
               </div>
             </div>
             {/* Details Group */}
@@ -107,11 +196,12 @@ export function StartRecoveryPage({
                   <span className="material-symbols-outlined text-[16px]">calendar_today</span> Target Date
                 </label>
                 <input
-                  className="tr-input font-body-md text-body-md font-medium"
+                  className={`tr-input font-body-md text-body-md font-medium ${errors.date ? 'border-error' : ''}`}
                   type="date"
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(e) => { setDate(e.target.value); if (errors.date) setErrors({ ...errors, date: '' }); }}
                 />
+                {errors.date && <p className="text-error text-sm font-label-sm">{errors.date}</p>}
               </div>
               <div className="flex flex-col gap-2">
                 <label className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
@@ -145,12 +235,13 @@ export function StartRecoveryPage({
                     <option value="JPY">JPY</option>
                   </select>
                   <input
-                    className="tr-input font-body-md text-body-md font-medium flex-1"
+                    className={`tr-input font-body-md text-body-md font-medium flex-1 ${errors.budget ? 'border-error' : ''}`}
                     type="number"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
                   />
                 </div>
+                {errors.budget && <p className="text-error text-sm font-label-sm">{errors.budget}</p>}
               </div>
             </div>
             <hr className="border-outline-variant/30 my-2" />

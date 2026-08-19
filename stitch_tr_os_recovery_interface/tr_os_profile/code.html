@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TR-OS - Profile &amp; Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#131b2e",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-bright": "#f7f9fb",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-tertiary-fixed": "#002113",
+                      "surface": "#f7f9fb",
+                      "secondary": "#00668a",
+                      "on-surface-variant": "#45464d",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#131b2e",
+                      "tertiary": "#000000",
+                      "inverse-surface": "#2d3133",
+                      "on-primary-container": "#7c839b",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-container": "#004d6a",
+                      "background": "#f7f9fb",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#004c69",
+                      "outline-variant": "#c6c6cd",
+                      "surface-container": "#eceef0",
+                      "on-tertiary-container": "#009668",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary-fixed": "#6ffbbe",
+                      "on-secondary-fixed": "#001e2c",
+                      "primary-fixed": "#dae2fd",
+                      "primary": "#000000",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d8dadc",
+                      "tertiary-container": "#002113",
+                      "inverse-primary": "#bec6e0",
+                      "surface-container-high": "#e6e8ea",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-background": "#191c1e",
+                      "secondary-container": "#40c2fd",
+                      "outline": "#76777d",
+                      "secondary-fixed": "#c4e7ff",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#565e74",
+                      "secondary-fixed-dim": "#7bd0ff",
+                      "primary-fixed-dim": "#bec6e0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "container-margin": "24px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "numeric-data": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "numeric-data": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased pb-[90px]">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-background flex justify-between items-center w-full px-container-margin py-stack-md">
+<button aria-label="Search" class="text-primary hover:bg-surface-container transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">travel_explore</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">TR-OS</h1>
+<button aria-label="Notifications" class="text-primary hover:bg-surface-container transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<main class="px-container-margin py-stack-lg max-w-3xl mx-auto space-y-stack-lg">
+<!-- Profile Header -->
+<section class="flex items-center gap-6">
+<div class="w-20 h-20 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden shrink-0 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)]">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">person</span>
+<!-- Optional User Image -->
+<!-- <img src="placeholder" data-alt="A close-up portrait of an active traveler looking confidently off-camera, wearing a sleek modern jacket, set against a soft blurred background of an airport terminal. Bright, clean lighting, high-end corporate lifestyle photography style." class="w-full h-full object-cover"> -->
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Alex Mercer</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">alex.mercer@example.com</p>
+<div class="mt-2 inline-flex items-center bg-[#F0F9FF] border border-[#E2E8F0] px-3 py-1 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-secondary mr-1 text-sm">verified</span>
+<span class="font-label-sm text-label-sm text-secondary">Verified Member</span>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="space-y-4">
+<!-- Account Settings Group -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#E2E8F0] shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] overflow-hidden">
+<div class="px-gutter py-3 bg-surface-container-lowest border-b border-[#E2E8F0]">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Account</h3>
+</div>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">person</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Personal Information</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">group</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Default Travelers</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">2 saved travelers</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">payments</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Preferred Currency</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant mr-2">USD ($)</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+</div>
+<!-- Preferences Group -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#E2E8F0] shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] overflow-hidden">
+<div class="px-gutter py-3 bg-surface-container-lowest border-b border-[#E2E8F0]">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Preferences</h3>
+</div>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">flight_takeoff</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Travel Preferences</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Aisles, non-stop, early morning</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">notifications_active</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Notifications</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+</div>
+<!-- Security Group -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#E2E8F0] shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] overflow-hidden">
+<div class="px-gutter py-3 bg-surface-container-lowest border-b border-[#E2E8F0]">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Security &amp; Legal</h3>
+</div>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">shield</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">Privacy &amp; Security</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center px-gutter py-4 hover:bg-surface-container-lowest transition-colors border-b border-[#E2E8F0] last:border-0 group" href="#">
+<span class="material-symbols-outlined text-secondary mr-4 group-hover:text-secondary-container transition-colors">info</span>
+<div class="flex-1">
+<span class="font-body-md text-body-md text-on-surface">About TR-OS</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Version 2.4.1</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface-variant transition-colors">chevron_right</span>
+</a>
+</div>
+<button class="w-full mt-6 py-4 text-center font-body-md text-body-md text-error hover:bg-error-container transition-colors rounded-xl border border-error-container">
+                Sign Out
+            </button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter pb-6 pt-2 bg-surface/80 backdrop-blur-md rounded-t-xl shadow-[0_-4px_20px_-2px_rgba(15,23,42,0.08)]">
+<!-- Inactive Tab: Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary px-4 py-1 hover:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Inactive Tab: Trips -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary px-4 py-1 hover:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">luggage</span>
+<span class="font-label-sm text-label-sm">Trips</span>
+</a>
+<!-- Active Tab: Profile -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

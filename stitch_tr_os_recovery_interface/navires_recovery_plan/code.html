@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recovery Recommendation - Navires</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "outline": "#76777d",
+                "surface": "#f7f9fb",
+                "error-container": "#ffdad6",
+                "inverse-on-surface": "#eff1f3",
+                "inverse-primary": "#bec6e0",
+                "secondary-fixed-dim": "#7bd0ff",
+                "surface-container": "#eceef0",
+                "on-primary-fixed": "#131b2e",
+                "outline-variant": "#c6c6cd",
+                "tertiary": "#000000",
+                "on-secondary-fixed": "#001e2c",
+                "on-surface": "#191c1e",
+                "secondary-container": "#40c2fd",
+                "surface-container-highest": "#e0e3e5",
+                "on-error": "#ffffff",
+                "on-tertiary-fixed": "#002113",
+                "tertiary-container": "#002113",
+                "surface-container-high": "#e6e8ea",
+                "on-error-container": "#93000a",
+                "on-primary": "#ffffff",
+                "surface-dim": "#d8dadc",
+                "secondary-fixed": "#c4e7ff",
+                "tertiary-fixed": "#6ffbbe",
+                "error": "#ba1a1a",
+                "surface-bright": "#f7f9fb",
+                "primary": "#000000",
+                "inverse-surface": "#2d3133",
+                "tertiary-fixed-dim": "#4edea3",
+                "secondary": "#00668a",
+                "on-background": "#191c1e",
+                "on-secondary-fixed-variant": "#004c69",
+                "on-tertiary-fixed-variant": "#005236",
+                "primary-fixed-dim": "#bec6e0",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f2f4f6",
+                "surface-tint": "#565e74",
+                "primary-container": "#131b2e",
+                "background": "#f7f9fb",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-container": "#004d6a",
+                "on-tertiary-container": "#009668",
+                "on-primary-container": "#7c839b",
+                "primary-fixed": "#dae2fd",
+                "on-primary-fixed-variant": "#3f465c",
+                "surface-variant": "#e0e3e5",
+                "on-secondary": "#ffffff",
+                "on-surface-variant": "#45464d"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "container-margin": "24px",
+                "gutter": "16px",
+                "stack-sm": "8px",
+                "stack-md": "16px",
+                "unit": "4px",
+                "stack-lg": "32px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "numeric-data": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "numeric-data": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-background text-primary flex justify-between items-center w-full px-container-margin py-stack-md docked full-width top-0 z-40 relative">
+<button class="p-2 -ml-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<div class="absolute left-1/2 -translate-x-1/2 h-8 flex items-center justify-center">
+<img alt="Navires" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGJkpTfEP24yaPj5US6YPfkKYOsvl0NOAIrWOvfptYnqLDv1pEY7PLF5GRuj_w-4QGIfnIqmENiEZVXS7wlLwfgYFXF5PJHweIIAn-akDO4__49WenflnBz41JDpUKdHwpi1TJS1q2zuHAkIUEpQQedrJWl3Rvnkt5u6KzeH1h_QNmvvCke4RL_KDP-AnW1jxHKZUgaZfSF0QfHTFh5Ha9EyFNdrfl76OFcfCQBeRa-LUMQoU9xZkYXKtn3dMxJIYq9OI"/>
+</div>
+<button class="p-2 -mr-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">more_vert</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-container-margin pb-[120px] pt-stack-md flex flex-col gap-stack-lg">
+<!-- Header Section -->
+<section class="flex flex-col gap-stack-sm">
+<div class="flex items-center gap-2">
+<div class="bg-tertiary-fixed/20 text-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 w-max">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                    Verified Recovery Plan
+                </div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-background">Your recovery plan</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">We've generated the optimal route to get you to your destination with minimal disruption.</p>
+</section>
+<!-- Hero Card (RecommendationCard) -->
+<section class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] overflow-hidden flex flex-col">
+<!-- Flight Header -->
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-start bg-surface-bright">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">flight_takeoff</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface">TR874</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Scoot Airlines</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-numeric-data text-numeric-data text-on-surface">USD 420.40</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Included in allowance</div>
+</div>
+</div>
+<!-- Flight Details Timeline -->
+<div class="p-stack-md md:p-container-margin flex flex-col md:flex-row gap-stack-md justify-between items-center relative">
+<!-- Departure -->
+<div class="flex flex-col md:items-start text-center md:text-left w-full md:w-auto">
+<div class="font-headline-md text-headline-md text-on-surface">07:05</div>
+<div class="font-label-md text-label-md text-on-surface-variant">KUL • Kuala Lumpur</div>
+<div class="font-body-md text-body-md text-outline mt-1">Oct 24, Terminal 2</div>
+</div>
+<!-- Connection/Duration -->
+<div class="flex flex-col items-center flex-1 w-full relative px-4 py-6 md:py-0">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-2">12h 55m</div>
+<div class="w-full flex items-center">
+<div class="h-[2px] bg-outline-variant flex-1"></div>
+<div class="px-2 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant border border-outline-variant z-10 flex flex-col items-center">
+<span>1 stop</span>
+<span class="text-[10px]">SIN</span>
+</div>
+<div class="h-[2px] bg-outline-variant flex-1"></div>
+</div>
+</div>
+<!-- Arrival -->
+<div class="flex flex-col md:items-end text-center md:text-right w-full md:w-auto">
+<div class="font-headline-md text-headline-md text-on-surface">20:00</div>
+<div class="font-label-md text-label-md text-on-surface-variant">NRT • Tokyo</div>
+<div class="font-body-md text-body-md text-outline mt-1">Oct 24, Terminal 1</div>
+</div>
+</div>
+<!-- Confidence Indicator -->
+<div class="px-stack-md py-3 bg-secondary/5 border-t border-surface-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<circle class="stroke-surface-variant" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-secondary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="17" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-label-md text-label-md text-secondary">83%</div>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Recovery Confidence</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">High likelihood of seamless connection</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">analytics</span>
+</div>
+<!-- Actions -->
+<div class="p-stack-md border-t border-surface-variant flex flex-col md:flex-row gap-3">
+<button class="w-full md:flex-1 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-fixed-variant transition-colors">
+                    Accept &amp; Book
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Why this flight? -->
+<section class="flex flex-col gap-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-background">Why this flight?</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- Evidence Card 1 -->
+<div class="bg-[#F0F9FF] border border-secondary-fixed-dim/30 rounded-lg p-3 flex items-start gap-3">
+<div class="mt-0.5 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Within budget</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Fully covered by disruption allowance.</div>
+</div>
+</div>
+<!-- Evidence Card 2 -->
+<div class="bg-[#F0F9FF] border border-secondary-fixed-dim/30 rounded-lg p-3 flex items-start gap-3">
+<div class="mt-0.5 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Meets constraints</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Avoids high-risk hubs during storm season.</div>
+</div>
+</div>
+<!-- Evidence Card 3 -->
+<div class="bg-[#F0F9FF] border border-secondary-fixed-dim/30 rounded-lg p-3 flex items-start gap-3">
+<div class="mt-0.5 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Highest score</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Ranked #1 out of 42 possible itineraries.</div>
+</div>
+</div>
+<!-- Evidence Card 4 -->
+<div class="bg-[#F0F9FF] border border-secondary-fixed-dim/30 rounded-lg p-3 flex items-start gap-3">
+<div class="mt-0.5 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Live Atlas data</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Verified via real-time ATC routing data.</div>
+</div>
+</div>
+<!-- Evidence Card 5 -->
+<div class="bg-[#F0F9FF] border border-secondary-fixed-dim/30 rounded-lg p-3 flex items-start gap-3 md:col-span-2">
+<div class="mt-0.5 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">No conflicts</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Aligns with your calendar and upcoming meetings.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Actions -->
+<section class="flex flex-col gap-3 pt-4 border-t border-surface-variant">
+<button class="w-full bg-surface text-secondary py-3 rounded-lg border border-outline-variant font-label-md text-label-md flex justify-center items-center hover:bg-surface-container transition-colors">
+                View recovery details
+            </button>
+<button class="w-full bg-transparent text-on-surface-variant py-3 font-label-md text-label-md flex justify-center items-center hover:text-on-surface transition-colors">
+                Compare alternatives
+            </button>
+</section>
+</main>
+<!-- Suppressed Bottom Navigation for focused transactional task -->
+</body></html>

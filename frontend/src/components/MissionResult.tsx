@@ -1,4 +1,9 @@
-/** Mission result screen — final recommendation and details. */
+/** Mission result screen — stitch UI inspired Recovery Plan + Alternatives.
+ *
+ * Adopts the navires_recovery_plan and navires_alternatives designs with
+ * status badge, recommendation card, alternatives comparison, budget summary,
+ * recovery info, and evidence badges.
+ */
 
 import type { MissionResult } from '../api/types';
 import { FlightCard } from './FlightCard';
@@ -10,61 +15,127 @@ interface Props {
 
 export function MissionResultView({ result, onNewMission }: Props) {
   const isApproved = result.status === 'approved' || result.status === 'completed';
+  const statusClass = isApproved ? 'approved' : result.status === 'conditional' ? 'conditional' : 'failed';
+
+  const evidenceBadges = isApproved
+    ? ['Within budget', 'Meets constraints', 'Highest score', 'Live Atlas data']
+    : [];
+
+  const budgetTotal = result.recommendation
+    ? result.recommendation.price
+    : 0;
+  const budgetLimit = (result.budget as Record<string, unknown>)?.limit as number | undefined;
+  const budgetRemaining = budgetLimit ? budgetLimit - budgetTotal : undefined;
+  const budgetPct = budgetLimit ? Math.round((budgetTotal / budgetLimit) * 100) : undefined;
 
   return (
     <div className="mission-result" data-testid="mission-result">
-      <div className={`status-badge ${isApproved ? 'approved' : 'failed'}`}>
+      {/* Status badge */}
+      <div className={`status-badge ${statusClass}`}>
+        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+          {isApproved ? 'check_circle' : result.status === 'conditional' ? 'warning' : 'error'}
+        </span>
         {isApproved ? 'Recommendation Approved' : `Status: ${result.status}`}
       </div>
 
+      {/* Recommendation flight card */}
       {result.recommendation && (
-        <FlightCard flight={result.recommendation} confidence={result.confidence} />
+        <div className="recovery-card">
+          <div className="recovery-card-title">
+            <span className="material-symbols-outlined">recommend</span>
+            Recommended Flight
+          </div>
+          <div className="recovery-card-decoration" />
+          <FlightCard
+            flight={result.recommendation}
+            confidence={result.confidence}
+            evidenceBadges={evidenceBadges}
+            highlight
+          />
+        </div>
       )}
 
+      {/* Alternatives */}
       {result.alternatives.length > 0 && (
-        <section className="alternatives">
-          <h3>Alternatives</h3>
+        <section className="result-section alternatives">
+          <h3>Alternative Flights</h3>
           {result.alternatives.map((alt, i) => (
             <div key={i} className="alt-card">
-              <strong>{alt.flight_number}</strong> — {alt.carrier}
-              <span>{alt.currency} {alt.price.toFixed(2)}</span>
-              <span>Score: {alt.score.toFixed(1)}</span>
+              <span className="alt-label">
+                {i === 0 ? 'Best Alternative' : `Option ${i + 1}`}
+              </span>
+              <FlightCard flight={alt} confidence={result.confidence} />
             </div>
           ))}
         </section>
       )}
 
-      <section className="budget-section">
+      {/* Budget summary */}
+      <section className="result-section budget-section">
         <h3>Budget</h3>
-        <pre>{JSON.stringify(result.budget, null, 2)}</pre>
+        {budgetLimit ? (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '4px' }}>
+              <span>Spent: {result.recommendation?.currency} {budgetTotal.toFixed(2)}</span>
+              <span>Limit: {result.recommendation?.currency} {budgetLimit.toFixed(2)}</span>
+            </div>
+            {budgetRemaining !== undefined && (
+              <div style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)' }}>
+                Remaining: {result.recommendation?.currency} {budgetRemaining.toFixed(2)} ({budgetPct}% used)
+              </div>
+            )}
+          </>
+        ) : (
+          <pre>{JSON.stringify(result.budget, null, 2)}</pre>
+        )}
       </section>
 
+      {/* Conflict warnings */}
       {result.conflicts.count > 0 && (
-        <section className="conflicts">
+        <section className="result-section">
           <h3>Warnings</h3>
-          <p>{result.conflicts.count} conflict(s) detected
+          <div className="conflict-warning">
+            <span className="material-symbols-outlined" style={{ fontSize: 18, verticalAlign: 'middle' }}>
+              warning
+            </span>
+            {' '}
+            {result.conflicts.count} conflict(s) detected
             {result.conflicts.has_critical && ' (critical)'}
-          </p>
+          </div>
         </section>
       )}
 
+      {/* Recovery info */}
       {result.recovery.occurred && (
-        <section className="recovery-info">
+        <section className="result-section">
           <h3>Recovery</h3>
-          <p>Recovery attempted: {result.recovery.attempts} attempt(s)</p>
-          <p>Recovered: {result.recovery.recovered ? 'Yes' : 'No'}</p>
-          {result.recovery.reason && <p>Reason: {result.recovery.reason}</p>}
+          <div style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)' }}>
+            <p style={{ marginBottom: '4px' }}>
+              Recovery attempted: {result.recovery.attempts} attempt(s)
+            </p>
+            <p style={{ marginBottom: '4px' }}>
+              Recovered: {result.recovery.recovered ? 'Yes' : 'No'}
+            </p>
+            {result.recovery.reason && (
+              <p>Reason: {result.recovery.reason}</p>
+            )}
+          </div>
         </section>
       )}
 
+      {/* Execution metadata */}
       <section className="execution-meta">
         <p>Mission: {result.mission_id}</p>
         <p>Duration: {result.execution_metadata.duration_ms}ms</p>
       </section>
 
-      <button onClick={onNewMission} className="btn-primary" data-testid="new-mission-btn">
-        New Mission
-      </button>
+      {/* Actions */}
+      <div className="result-actions">
+        <button onClick={onNewMission} className="btn-primary" data-testid="new-mission-btn">
+          <span className="material-symbols-outlined" style={{ fontSize: 20 }}>add</span>
+          New Mission
+        </button>
+      </div>
     </div>
   );
 }

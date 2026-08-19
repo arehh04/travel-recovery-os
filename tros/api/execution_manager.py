@@ -31,7 +31,7 @@ import logging
 import queue
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -334,12 +334,33 @@ class ExecutionManager:
             # Persist state change (Phase 10)
             self._persist_execution(execution)
 
-            # Run the synchronous MissionService
-            result = self._service.run(
+            # Run the synchronous MissionService with timeout enforcement
+            _timeout_executor = ThreadPoolExecutor(max_workers=1)
+            _future = _timeout_executor.submit(
+                self._service.run,
                 request=request,
                 idempotency_key=idempotency_key,
                 cancellation_token=execution.cancellation_token,
             )
+            try:
+                result = _future.result(timeout=self._mission_timeout)
+            except FuturesTimeoutError:
+                # Mission exceeded the timeout — mark as failed
+                execution.status = "FAILED"
+                execution.phase = "COMPLETED"
+                execution.progress = 1.0
+                execution.completed_at = datetime.now(timezone.utc)
+                execution.error = f"Mission timed out after {self._mission_timeout}s"
+                self._emit_event(execution, "mission.failed", {
+                    "mission_id": execution.mission_id,
+                    "error": "Timeout",
+                })
+                self._update_metric("total_failed", 1)
+                self._persist_execution(execution)
+                _timeout_executor.shutdown(wait=False)
+                return
+            finally:
+                _timeout_executor.shutdown(wait=False)
 
             # Check if cancelled during execution
             if execution.cancellation_token.is_cancelled():

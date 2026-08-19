@@ -1,0 +1,77 @@
+
+============================================================
+Test 1: Backend Health Check
+Result: PASS
+Detail: Status: healthy, Checks: 3
+============================================================
+
+============================================================
+Test 2: Frontend Home Page Renders
+Result: PASS
+Detail: Title found: True, Root div: True
+============================================================
+
+============================================================
+Test 3: Create Recovery Mission (POST /missions)
+Result: PASS
+Detail: Mission ID: mission-44f1a3e77242, Status: RUNNING
+============================================================
+
+============================================================
+Test 4: Poll Mission Status (GET /missions/{id}/status)
+Result: PASS
+Detail: Phase: FLIGHT_SEARCH, Progress: 0.3, Status: RUNNING
+============================================================
+  Poll 1/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 2/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 3/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 4/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 5/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 6/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 7/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 8/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 9/30: status=COMPLETED, phase=COMPLETED, progress=1.0
+
+============================================================
+Test 5: Get Mission Result (GET /missions/{id})
+Result: PASS
+Detail: Flight: AK701, Carrier: AK, Price: 101.56, Confidence: 0.83, Alternatives: 4
+============================================================
+
+============================================================
+Test 6: Frontend Live Recovery Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 7: Frontend Recovery Plan Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 8: Frontend Evidence Validation Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 9: Frontend History Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 10: Frontend Profile Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+LIVE SCENARIO TEST SUMMARY
+============================================================
+  Passed: 10/10
+  Failed: 0/10
+  Total:  10/10
+============================================================

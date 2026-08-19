@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Navires - Evidence &amp; Validation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#40c2fd",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-tint": "#565e74",
+                      "surface-container-low": "#f2f4f6",
+                      "on-primary-container": "#7c839b",
+                      "tertiary-container": "#002113",
+                      "on-secondary": "#ffffff",
+                      "surface": "#f7f9fb",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#00668a",
+                      "primary-container": "#131b2e",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-dim": "#d8dadc",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-surface": "#191c1e",
+                      "outline": "#76777d",
+                      "on-tertiary-container": "#009668",
+                      "secondary-fixed": "#c4e7ff",
+                      "surface-bright": "#f7f9fb",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#7bd0ff",
+                      "on-surface-variant": "#45464d",
+                      "outline-variant": "#c6c6cd",
+                      "primary": "#000000",
+                      "on-background": "#191c1e",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#004c69",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-container-high": "#e6e8ea",
+                      "surface-container-highest": "#e0e3e5",
+                      "primary-fixed": "#dae2fd",
+                      "background": "#f7f9fb",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#004d6a",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#2d3133",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container": "#eceef0",
+                      "on-primary-fixed": "#131b2e",
+                      "on-tertiary-fixed": "#002113",
+                      "inverse-primary": "#bec6e0",
+                      "on-secondary-fixed": "#001e2c",
+                      "tertiary": "#000000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "stack-sm": "8px",
+                      "gutter": "16px",
+                      "container-margin": "24px",
+                      "unit": "4px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "numeric-data": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "numeric-data": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ai-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased pb-stack-lg">
+<!-- TopAppBar (Shared Component JSON) -->
+<header class="bg-background dark:bg-background text-primary dark:text-primary docked full-width top-0 flat no shadows flex justify-between items-center w-full px-container-margin py-stack-md sticky z-50">
+<button class="text-on-surface-variant hover:bg-surface-container transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">travel_explore</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary">
+            TR-OS
+        </div>
+<button class="text-on-surface-variant hover:bg-surface-container transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin mt-stack-md flex flex-col gap-stack-lg">
+<!-- Page Header & Branding -->
+<section class="flex flex-col items-center text-center space-y-stack-sm mt-stack-sm">
+<img alt="Navires Logo" class="w-16 h-16 object-contain mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfVOsghYFsLcxj9GpnEpWEP6R0FCe7HJ35oO6aZAJJvAsJWnS9NMoTjLn8p4v4Ysy76nEZeywRUJbV4VwdH2svPH0X422hYF0Jbl54gQRwK27PSvxExDqfb4886tM0zUxVLNdCNz_UzJwRltId5d0fMy3gFkQmHedqaVu5qEQpY-THOGwTdMflKWEyDHPXjXca23JVog6r_LLHiBLklHixOnmnzU9mXvZVDFC4ikjaW4-eO2fDJvVPFeka7JyzFuIEK0c"/>
+<div class="inline-flex items-center gap-2 bg-secondary-fixed/20 px-3 py-1 rounded-full border border-secondary-fixed-dim">
+<div class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Validation Engine Active</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary mt-unit">Why TR874?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">Navires AI has selected this recovery route based on multi-variable constraint analysis.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Flight Evidence (EvidenceCard) -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">database</span>
+                        Flight Evidence
+                    </h2>
+<span class="bg-surface-container-high text-on-surface font-label-sm text-label-sm px-2 py-1 rounded-full">Atlas Verified</span>
+</div>
+<div class="mt-unit bg-surface-bright rounded-lg border border-surface-variant p-stack-sm flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">flight_takeoff</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Route Feasibility Confirmed</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Historical punctuality: 94% on this specific routing.</div>
+</div>
+</div>
+<div class="h-px w-full bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">network_check</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Capacity Check Passed</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Real-time GDS query confirms 4 available seats in requested class.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Constraint Checks -->
+<div class="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary">rule</span>
+                    Constraint Checks
+                </h2>
+<div class="flex flex-col gap-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Origin / Destination Match</div>
+<div class="text-sm text-on-surface-variant">Strict match enforced.</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Layover Tolerance</div>
+<div class="text-sm text-on-surface-variant">&lt; 3 hrs at secondary hub.</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Cabin Class</div>
+<div class="text-sm text-on-surface-variant">Premium Economy preserved.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Budget Analysis -->
+<div class="md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">payments</span>
+                    Budget Analysis
+                </h2>
+<div class="flex flex-col gap-2 mt-4">
+<div class="flex justify-between items-end">
+<span class="font-numeric-data text-numeric-data text-primary">USD 420.40</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Limit: 1,000.00</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-3 overflow-hidden">
+<div class="bg-secondary h-3 rounded-full" style="width: 42%;"></div>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant text-right mt-1">42% of allocated recovery fund</div>
+</div>
+</div>
+<!-- Ranking Score (ConfidenceIndicator) -->
+<div class="md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col items-center justify-center gap-stack-sm relative overflow-hidden">
+<h2 class="font-headline-md text-headline-md text-on-surface absolute top-stack-md left-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">monitoring</span>
+                    Ranking Score
+                </h2>
+<div class="relative w-32 h-32 mt-8 flex items-center justify-center">
+<!-- Fake SVG progress ring -->
+<svg class="absolute inset-0 w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="#e0e3e5" stroke-width="8"></circle>
+<circle cx="50" cy="50" fill="none" r="45" stroke="#4edea3" stroke-dasharray="282.7" stroke-dashoffset="28.27" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="flex flex-col items-center text-center z-10">
+<span class="font-display-lg text-display-lg text-primary leading-none">92</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Confidence</span>
+</div>
+</div>
+</div>
+<!-- Reflection Text Block -->
+<div class="col-span-full bg-surface-container border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] border-l-4 border-l-secondary relative">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+                    Engine Reflection
+                </h2>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                    "Option TR874 represents the mathematically optimal path to recovery. While alternative XJ109 offers a 15-minute earlier arrival, TR874 provides superior connection resilience at the secondary hub (p=0.98 vs p=0.72) and falls well within the corporate fiscal constraints. Equipment type matching was prioritized to maintain user comfort standards."
+                </p>
+</div>
+</div>
+</main>
+</body></html>

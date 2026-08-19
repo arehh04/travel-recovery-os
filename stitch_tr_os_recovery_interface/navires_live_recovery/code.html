@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Live Mission / AI Recovery</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#faf8fd",
+                    "surface-dim": "#dbd9dd",
+                    "surface-bright": "#faf8fd",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f5f3f7",
+                    "surface-container": "#efedf2",
+                    "surface-container-high": "#e9e7ec",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-surface": "#1b1b1e",
+                    "on-surface-variant": "#45464f",
+                    "outline": "#767680",
+                    "outline-variant": "#c6c5d0",
+                    "inverse-surface": "#303033",
+                    "inverse-on-surface": "#f2f0f4",
+                    "primary": "#325da7",
+                    "on-primary": "#ffffff",
+                    "primary-container": "#d9e2ff",
+                    "on-primary-container": "#001a43",
+                    "secondary": "#575e71",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#dce2f9",
+                    "on-secondary-container": "#141b2c",
+                    "tertiary": "#725573",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#fad7fb",
+                    "on-tertiary-container": "#2a132d",
+                    "error": "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#410002"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "1.5rem",
+                    "xl": "2rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk", "sans-serif"],
+                    "label-sm": ["Hanken Grotesk", "sans-serif"],
+                    "body-lg": ["Hanken Grotesk", "sans-serif"],
+                    "headline-md": ["Hanken Grotesk", "sans-serif"],
+                    "label-md": ["Hanken Grotesk", "sans-serif"],
+                    "body-md": ["Hanken Grotesk", "sans-serif"],
+                    "headline-lg": ["Hanken Grotesk", "sans-serif"],
+                    "numeric-data": ["Hanken Grotesk", "sans-serif"],
+                    "headline-lg-mobile": ["Hanken Grotesk", "sans-serif"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                    "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                    "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "numeric-data": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                    "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .timeline-line {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            bottom: -8px;
+            width: 2px;
+            z-index: 0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar (From Shared Components) -->
+<nav class="bg-background flex justify-between items-center w-full px-container-margin py-stack-md docked full-width top-0 z-50">
+<div class="flex items-center justify-center w-10 h-10 hover:bg-surface-container transition-colors rounded-full cursor-pointer">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="travel_explore">travel_explore</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight">Navires</div>
+<div class="flex items-center justify-center w-10 h-10 hover:bg-surface-container transition-colors rounded-full cursor-pointer">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="notifications">notifications</span>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-xl mx-auto px-container-margin py-stack-lg flex flex-col gap-stack-lg relative z-10">
+<!-- Header -->
+<header class="flex flex-col items-center text-center gap-stack-sm mb-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Assisting with your recovery</h1>
+<div class="flex items-center gap-2 text-on-secondary-container font-label-md text-label-md bg-secondary-container px-4 py-2 rounded-full border border-outline-variant/50">
+<span class="material-symbols-outlined text-[16px] text-primary">flight_takeoff</span>
+<span>Mission: KUL <span class="material-symbols-outlined text-[16px] align-middle px-1">arrow_right_alt</span> NRT, 20 Aug 2026</span>
+</div>
+</header>
+<!-- Live Status Card (Glass-adjacent) -->
+<section class="bg-surface-container-lowest border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] rounded-xl p-8 flex flex-col items-center gap-6 relative overflow-hidden">
+<!-- Subtle atmospheric glow -->
+<div class="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-secondary-container/20 to-transparent opacity-50"></div>
+<!-- Animated Progress Ring -->
+<div class="relative w-28 h-28 flex items-center justify-center mt-2">
+<!-- Background track -->
+<svg class="w-full h-full absolute inset-0 text-surface-container-highest" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-width="4"></circle>
+</svg>
+<!-- Active pulsing track -->
+<svg class="w-full h-full absolute inset-0 text-primary animate-[spin_4s_linear_infinite]" style="stroke-dasharray: 100 200; stroke-linecap: round;" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-width="6"></circle>
+</svg>
+<!-- Center Icon -->
+<div class="bg-surface-container-lowest rounded-full p-3 shadow-sm z-10">
+<span class="material-symbols-outlined text-primary text-4xl animate-pulse" style="font-variation-settings: 'FILL' 1;">radar</span>
+</div>
+</div>
+<div class="text-center z-10 flex flex-col gap-2">
+<h2 class="font-headline-md text-headline-md text-primary">Searching live flight options</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center justify-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping absolute opacity-75"></span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                    23 live offers found
+                </p>
+</div>
+</section>
+<!-- RecoveryTimeline -->
+<section class="bg-surface-container-lowest border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] rounded-xl p-6 md:p-8">
+<div class="relative">
+<!-- Step 1: Completed -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-tertiary"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-tertiary flex items-center justify-center relative z-10 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Mission understood</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-tertiary"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-tertiary flex items-center justify-center relative z-10 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface">Traveler constraints checked</p>
+</div>
+</div>
+<!-- Step 3: Active -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-surface-container-highest"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center relative z-10 mt-0.5 shadow-[0_0_12px_rgba(0,102,138,0.2)]">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-primary">Searching live flights</p>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-surface-container-highest"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center relative z-10 mt-0.5">
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Comparing alternatives</p>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-surface-container-highest"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center relative z-10 mt-0.5">
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Checking budget</p>
+</div>
+</div>
+<!-- Step 6: Pending -->
+<div class="relative flex items-start gap-4 pb-8">
+<div class="timeline-line bg-surface-container-highest"></div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center relative z-10 mt-0.5">
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Reviewing recommendation</p>
+</div>
+</div>
+<!-- Step 7: Pending (Final) -->
+<div class="relative flex items-start gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center relative z-10 mt-0.5">
+</div>
+<div class="flex-1 pt-0.5">
+<p class="font-label-md text-label-md text-on-surface-variant">Final validation</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Status Indicator -->
+<div class="flex justify-center mt-4 mb-8">
+<div class="inline-flex items-center gap-3 bg-surface/80 backdrop-blur-md border border-outline-variant/50 px-5 py-3 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-primary animate-[spin_3s_linear_infinite] text-[18px]">sync</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wide">Navires is evaluating your options...</span>
+</div>
+</div>
+</main>
+</body></html>

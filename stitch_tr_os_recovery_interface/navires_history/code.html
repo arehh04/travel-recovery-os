@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Navires - Mission History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#faf8fd",
+                      "surface-dim": "#dbd9dd",
+                      "surface-bright": "#faf8fd",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f5f3f7",
+                      "surface-container": "#efedf1",
+                      "surface-container-high": "#e9e7ec",
+                      "surface-container-highest": "#e3e2e6",
+                      "surface-variant": "#e2e2e5",
+                      "on-surface": "#1b1b1f",
+                      "on-surface-variant": "#45464a",
+                      "inverse-surface": "#303033",
+                      "inverse-on-surface": "#f2f0f4",
+                      "background": "#faf8fd",
+                      "on-background": "#1b1b1f",
+                      "primary": "#475d92",
+                      "primary-container": "#d8e2ff",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#001a43",
+                      "secondary": "#585e71",
+                      "secondary-container": "#dce2f9",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#151b2c",
+                      "tertiary": "#735472",
+                      "tertiary-container": "#ffd7f8",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-container": "#2a122c",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#410002",
+                      "outline": "#75777a",
+                      "outline-variant": "#c5c6ca",
+                      "inverse-primary": "#adc6ff",
+                      "primary-fixed": "#d8e2ff",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-primary-fixed": "#001a43",
+                      "on-primary-fixed-variant": "#2f4578",
+                      "secondary-fixed": "#dce2f9",
+                      "secondary-fixed-dim": "#c0c6dc",
+                      "on-secondary-fixed": "#151b2c",
+                      "on-secondary-fixed-variant": "#404659",
+                      "tertiary-fixed": "#ffd7f8",
+                      "tertiary-fixed-dim": "#e0b6df",
+                      "on-tertiary-fixed": "#2a122c",
+                      "on-tertiary-fixed-variant": "#5a3d59",
+                      "surface-tint": "#475d92"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "sm": "0.125rem",
+                      "md": "0.375rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "2xl": "1rem",
+                      "3xl": "1.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "24px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "unit": "4px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "numeric-data": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "numeric-data": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pb-32">
+<!-- TopAppBar -->
+<header class="bg-background text-primary docked full-width top-0 flat no shadows flex justify-between items-center w-full px-container-margin py-stack-md sticky z-40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">travel_explore</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Navires</span>
+</div>
+<button aria-label="Notifications" class="hover:bg-surface-container transition-colors rounded-full p-2">
+<span class="material-symbols-outlined text-primary text-[24px]">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow px-container-margin py-stack-lg max-w-[1280px] mx-auto w-full">
+<header class="mb-stack-lg">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Mission History</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review your past travels and recovery operations.</p>
+</header>
+<!-- Timeline / List Container -->
+<div class="flex flex-col gap-stack-md relative">
+<!-- Timeline Line (Desktop only for visual connection) -->
+<div class="hidden md:block absolute left-8 top-8 bottom-8 w-[2px] bg-outline-variant z-0"></div>
+<!-- Mission Item 1: Recovered -->
+<div class="relative bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] p-stack-md flex flex-col md:flex-row gap-stack-md z-10 transition-all hover:shadow-lg group">
+<div class="hidden md:flex flex-col items-center justify-start min-w-[64px]">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container mb-2 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md text-primary">KUL <span class="text-outline-variant mx-1">→</span> NRT</h2>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Recovered
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        20 Aug 2026
+                    </div>
+<div class="bg-surface-bright rounded-lg p-3 border border-outline-variant/50 text-sm flex flex-col gap-2">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">flight_takeoff</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Original flight MH70 disrupted. AI rerouted via SQ12.</span>
+</div>
+<button class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline w-fit">
+                            View Recovery Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Mission Item 2: Completed -->
+<div class="relative bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] p-stack-md flex flex-col md:flex-row gap-stack-md z-10 transition-all hover:shadow-lg group">
+<div class="hidden md:flex flex-col items-center justify-start min-w-[64px]">
+<div class="w-12 h-12 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">done_all</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md text-primary">KUL <span class="text-outline-variant mx-1">→</span> SIN</h2>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done</span>
+                            Completed
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        18 Aug 2026
+                    </div>
+<div class="bg-surface-bright rounded-lg p-3 border border-outline-variant/50 text-sm">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">info</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Mission completed smoothly without automated interventions.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mission Item 3: Cancelled -->
+<div class="relative bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] p-stack-md flex flex-col md:flex-row gap-stack-md z-10 transition-all hover:shadow-lg group opacity-75">
+<div class="hidden md:flex flex-col items-center justify-start min-w-[64px]">
+<div class="w-12 h-12 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">cancel</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md text-primary">BKK <span class="text-outline-variant mx-1">→</span> HKG</h2>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">block</span>
+                            Cancelled
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        10 Aug 2026
+                    </div>
+</div>
+</div>
+<!-- Mission Item 4: Failed -->
+<div class="relative bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] p-stack-md flex flex-col md:flex-row gap-stack-md z-10 transition-all hover:shadow-lg group">
+<div class="hidden md:flex flex-col items-center justify-start min-w-[64px]">
+<div class="w-12 h-12 rounded-full bg-error-container text-on-error-container flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">warning</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md text-primary">LHR <span class="text-outline-variant mx-1">→</span> JFK</h2>
+</div>
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                            Failed
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        05 Aug 2026
+                    </div>
+<div class="bg-surface-bright rounded-lg p-3 border border-outline-variant/50 text-sm">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">report</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Severe weather disruption. Alternative routing not accepted by user within time window.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-surface/80 text-secondary backdrop-blur-md fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter pb-6 pt-2 rounded-t-xl border-t border-outline-variant shadow-[0_-4px_20px_-2px_rgba(15,23,42,0.08)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-secondary hover:scale-90 duration-200 ease-out transition-all">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:scale-90 duration-200 ease-out transition-all">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">luggage</span>
+<span class="font-label-sm text-label-sm">Trips</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-secondary hover:scale-90 duration-200 ease-out transition-all">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>

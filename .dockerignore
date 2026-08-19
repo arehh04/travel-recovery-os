@@ -1,0 +1,40 @@
+# Build exclusions
+.git/
+.gitignore
+.qoder/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+
+# Tests (not needed in production image)
+tests/
+conftest.py
+
+# Environment files
+.env
+.env.*
+.env.example
+
+# Documentation
+*.md
+!README.md
+PHASE_*.md
+demo/
+
+# IDE and tooling
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Frontend dev dependencies
+frontend/node_modules/
+frontend/dist/
+
+# Data directory (mounted at runtime)
+data/

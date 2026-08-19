@@ -1,8 +1,8 @@
-"""Authentication boundary — AuthContext and dev provider (Phase 8).
+"""Authentication boundary — AuthContext and provider delegation (Phase 8/9).
 
 Establishes an authentication boundary without building full user management.
 Development mode: extracts user identity from X-Dev-User-Id header.
-Production: replaceable with JWT/OAuth middleware.
+Production: validates HMAC-SHA256 bearer tokens via BearerTokenProvider.
 
 The API never trusts raw client-provided user_id/tenant_id/role
 without authentication.
@@ -15,8 +15,6 @@ from typing import Optional
 
 from fastapi import Depends, HTTPException, Request, Security
 from fastapi.security import APIKeyHeader
-
-from tros.api.config import AUTH_ENABLED
 
 
 # Header for dev-mode authentication
@@ -40,42 +38,14 @@ class AuthContext:
         return not self.authenticated
 
 
-def get_auth_context(
-    request: Request,
-    dev_user_id: Optional[str] = Security(_dev_user_header),
-) -> AuthContext:
+def get_auth_context(request: Request) -> AuthContext:
     """FastAPI dependency: extract or create AuthContext for the request.
 
-    In development mode (AUTH_ENABLED=false), creates a dev context from
-    the X-Dev-User-Id header or a default anonymous user.
-
-    In production mode (AUTH_ENABLED=true), requires valid authentication.
+    Delegates to the configured auth provider (dev or bearer).
     """
-    if not AUTH_ENABLED:
-        # Development mode: trust the header for convenience
-        user_id = dev_user_id or "dev-user"
-        return AuthContext(
-            user_id=user_id,
-            tenant_id="dev",
-            roles=["developer"],
-            authenticated=True,
-        )
-
-    # Production mode: require real authentication
-    # For now, reject if no valid auth mechanism is present
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header:
-        raise HTTPException(
-            status_code=401,
-            detail="Authentication required",
-        )
-
-    # Placeholder for JWT/OAuth validation
-    # In production, parse and validate the token here
-    raise HTTPException(
-        status_code=501,
-        detail="Production authentication not yet implemented",
-    )
+    from tros.api.auth_providers import get_auth_provider
+    provider = get_auth_provider()
+    return provider.authenticate(request)
 
 
 def require_auth(auth: AuthContext = Depends(get_auth_context)) -> AuthContext:

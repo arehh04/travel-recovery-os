@@ -1,0 +1,77 @@
+# Production deployment with nginx reverse proxy (Phase 10)
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.25.4-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    depends_on:
+      tros-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - tros-net
+
+  tros-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_VERSION: ${TR_OS_BUILD_VERSION:-0.10.0}
+        COMMIT_SHA: ${TR_OS_COMMIT_SHA:-unknown}
+    environment:
+      - TR_OS_ENVIRONMENT=production
+      - TR_OS_API_HOST=0.0.0.0
+      - TR_OS_API_PORT=8000
+      - TR_OS_AUTH_MODE=bearer
+      - TR_OS_AUTH_SECRET=${TR_OS_AUTH_SECRET}
+      - TR_OS_ATLAS_AUTH_TOKEN=${TR_OS_ATLAS_AUTH_TOKEN}
+      - TR_OS_CORS_ORIGINS=${TR_OS_CORS_ORIGINS:-https://yourdomain.com}
+      - TR_OS_MAX_WORKERS=1
+      - TR_OS_WORKER_COUNT=1
+      - TR_OS_MAX_CONCURRENT_MISSIONS=10
+      - TR_OS_SSE_HEARTBEAT_SEC=15
+      - TR_OS_IDEMPOTENCY_TTL_SEC=3600
+      - TR_OS_BUILD_VERSION=${TR_OS_BUILD_VERSION:-0.10.0}
+      - TR_OS_COMMIT_SHA=${TR_OS_COMMIT_SHA:-unknown}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    volumes:
+      - ./data:/app/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - tros-net
+
+networks:
+  tros-net:
+    driver: bridge

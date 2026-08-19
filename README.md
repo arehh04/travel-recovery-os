@@ -35,7 +35,9 @@ DeepSeek LLM    Atlas Flight CLI
 | 6 | Summary + Recovery — final output and error recovery | 50 |
 | 7 | Production Hardening — execution context, logging, health | 68 |
 | 8 | API + PWA — FastAPI, React PWA, Docker deployment | 84 |
-| | **Total** | **340** |
+| 9 | Production Hardening — config, auth, rate limiting, SSE, metrics, security | 121 |
+| 10 | Production Deployment — SQLite, HTTPS, CI/CD, observability | 88 |
+| | **Total** | **549** |
 
 ## Quick Start
 
@@ -73,10 +75,69 @@ cd frontend && npm run dev
 ### Docker
 
 ```bash
+# Development
 cp .env.example .env
 # Fill in credentials
 docker-compose up --build
+
+# Production
+docker-compose -f docker-compose.prod.yml up --build
 ```
+
+## Production Deployment
+
+See [PHASE_10.md](PHASE_10.md) for complete deployment documentation.
+
+### Quick Deploy
+
+```bash
+# 1. Configure environment
+cp .env.example .env
+nano .env  # Set DEEPSEEK_API_KEY, TR_OS_AUTH_SECRET, TR_OS_ATLAS_AUTH_TOKEN
+
+# 2. Initialize Let's Encrypt (first time)
+./scripts/init-letsencrypt.sh your-domain.com
+
+# 3. Build and start
+docker-compose -f docker-compose.prod.yml up -d --build
+
+# 4. Verify
+python scripts/smoke_test.py https://your-domain.com
+```
+
+### Production Checklist
+
+- [ ] Set `TR_OS_ENVIRONMENT=production`
+- [ ] Set `TR_OS_AUTH_MODE=bearer` and `TR_OS_AUTH_SECRET`
+- [ ] Set `DEEPSEEK_API_KEY` (non-placeholder)
+- [ ] Set `TR_OS_ATLAS_AUTH_TOKEN`
+- [ ] Configure `TR_OS_CORS_ORIGINS` (no wildcards)
+- [ ] Initialize Let's Encrypt certificates
+- [ ] Verify HTTPS redirect works
+- [ ] Run smoke test
+- [ ] Setup automated backups
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TR_OS_ENVIRONMENT` | `development` | Environment: development, testing, production |
+| `TR_OS_API_PORT` | `8000` | API port |
+| `TR_OS_CORS_ORIGINS` | `http://localhost:5173,http://localhost:3000` | CORS origins (comma-separated) |
+| `TR_OS_AUTH_MODE` | `dev` | Auth mode: dev or bearer |
+| `TR_OS_AUTH_SECRET` | (empty) | HMAC secret for bearer tokens |
+| `TR_OS_MAX_WORKERS` | `4` | Thread pool workers |
+| `TR_OS_MAX_CONCURRENT_MISSIONS` | `10` | Max concurrent missions |
+| `TR_OS_SSE_HEARTBEAT_SEC` | `15` | SSE heartbeat interval |
+| `TR_OS_IDEMPOTENCY_TTL_SEC` | `3600` | Idempotency key TTL |
+| `TR_OS_RATE_LIMIT_RPM` | `60` | Rate limit (requests/min) |
+| `TR_OS_DATABASE_URL` | `data/tros.db` | SQLite database path |
+| `TR_OS_BUILD_VERSION` | `0.10.0` | Build version (injected by CI) |
+| `TR_OS_COMMIT_SHA` | (git) | Commit SHA (injected by CI) |
+| `TR_OS_BUILD_TIME` | (build) | ISO 8601 build timestamp |
+| `TR_OS_WORKER_COUNT` | `1` | Worker count (must be 1 in production) |
+| `TR_OS_ATLAS_AUTH_TOKEN` | (empty) | Atlas API authentication token |
+| `DEEPSEEK_API_KEY` | (required) | DeepSeek API key |
 
 ## API
 
@@ -89,6 +150,7 @@ docker-compose up --build
 | `GET` | `/api/v1/missions/:id/events` | SSE event stream |
 | `GET` | `/api/v1/health` | Health check |
 | `GET` | `/api/v1/readiness` | Readiness probe |
+| `GET` | `/api/v1/metrics` | Aggregate metrics |
 
 ### Example
 
@@ -118,10 +180,10 @@ curl http://localhost:8000/api/v1/missions/{id}
 ## Testing
 
 ```bash
-# Backend tests
+# Backend tests (549 tests)
 pytest
 
-# Frontend tests
+# Frontend tests (25 tests)
 cd frontend && npm test
 
 # All tests
@@ -137,6 +199,10 @@ tros/
   service/         # Phase 7 mission service boundary
   recovery/        # Phase 6 recovery engine
   api/             # Phase 8 FastAPI API layer
+    migrations/    # Phase 10 database migrations
+    repositories_sqlite.py  # Phase 10 SQLite persistence
+    db.py          # Phase 10 connection management
+    build_info.py  # Phase 10 version metadata
 frontend/
   src/
     api/           # Typed API client
@@ -144,7 +210,12 @@ frontend/
     hooks/         # State management hooks
     styles/        # Mobile-first CSS
   public/          # PWA manifest, service worker, icons
-tests/             # Backend test suite
+scripts/
+  smoke_test.py    # Phase 10 deployment smoke test
+  init-letsencrypt.sh  # Phase 10 TLS setup
+.github/workflows/  # Phase 10 CI/CD pipelines
+nginx/             # Phase 10 TLS configuration
+tests/             # Backend test suite (549 tests)
 ```
 
 ## License

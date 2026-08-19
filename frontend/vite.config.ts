@@ -14,7 +14,10 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: 'hidden',
+  },
+  define: {
+    __APP_VERSION__: '"0.10.0"',
   },
   test: {
     globals: true,

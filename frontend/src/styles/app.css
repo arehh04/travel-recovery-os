@@ -279,3 +279,72 @@ body {
   margin-top: 8px;
   font-size: 0.875rem;
 }
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #334155;
+  }
+  .error-display {
+    background: #450a0a;
+    border-color: #7f1d1d;
+  }
+  .error-display p { color: var(--text-muted); }
+  .conflict-warning {
+    background: #451a03;
+    border-color: #78350f;
+  }
+}
+
+/* Responsive breakpoints */
+@media (min-width: 375px) {
+  .app { max-width: 480px; }
+}
+
+@media (min-width: 768px) {
+  .app {
+    max-width: 640px;
+    padding: 0 16px;
+  }
+  .app-header { border-radius: 0 0 var(--radius) var(--radius); }
+}
+
+/* Improved focus states */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Phase transition animation */
+.phase-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.phase-item.phase-active {
+  transform: translateX(4px);
+}
+
+/* Timeout warning */
+.timeout-warning {
+  background: #fffbeb;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--warning);
+}
+
+/* Validation error */
+.field-error {
+  color: var(--error);
+  font-size: 0.75rem;
+  margin-top: 2px;
+}

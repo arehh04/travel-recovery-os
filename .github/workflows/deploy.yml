@@ -1,0 +1,49 @@
+# TR-OS Deploy Pipeline (Phase 10)
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+env:
+  TR_OS_BUILD_VERSION: ${{ github.sha }}
+  TR_OS_COMMIT_SHA: ${{ github.sha }}
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg BUILD_VERSION=${{ github.sha }} \
+            --build-arg COMMIT_SHA=${{ github.sha }} \
+            -t tros-api:${{ github.sha }} \
+            -t tros-api:latest \
+            .
+
+      # Placeholder: push to container registry
+      # - name: Push to registry
+      #   run: |
+      #     echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+      #     docker tag tros-api:${{ github.sha }} ${{ secrets.REGISTRY_URL }}/tros-api:${{ github.sha }}
+      #     docker push ${{ secrets.REGISTRY_URL }}/tros-api:${{ github.sha }}
+
+      # Placeholder: deploy to server
+      # - name: Deploy to VPS
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: ${{ secrets.DEPLOY_HOST }}
+      #     username: ${{ secrets.DEPLOY_USER }}
+      #     key: ${{ secrets.DEPLOY_KEY }}
+      #     script: |
+      #       cd /opt/tros
+      #       docker compose -f docker-compose.prod.yml pull
+      #       docker compose -f docker-compose.prod.yml up -d
+
+      - name: Smoke test placeholder
+        run: echo "Deploy pipeline configured. Add registry and server details to activate."

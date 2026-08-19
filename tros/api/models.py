@@ -139,3 +139,7 @@ class HealthResponse(BaseModel):
     """Health/readiness response."""
     status: str
     checks: list[HealthCheckItem] = Field(default_factory=list)
+    # Phase 10 build info
+    version: str = ""
+    commit: str = ""
+    build_time: str = ""

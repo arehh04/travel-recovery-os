@@ -52,7 +52,7 @@ export function App() {
       </main>
 
       <footer className="app-footer">
-        <span>Phase 8 — API + PWA</span>
+        <span>Phase 10 — Production Deployment</span>
       </footer>
     </div>
   );

@@ -35,7 +35,7 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
   const currency = flight.currency || state.request?.currency || 'USD';
   const price = flight.price;
   const budgetPct = Math.round((price / budgetLimit) * 100);
-  const confidence = Math.round(result.confidence * 100);
+  const confidence = result.confidence <= 1 ? Math.round(result.confidence * 100) : Math.min(100, Math.round(result.confidence));
   const confidenceOffset = 100 - confidence;
 
   // Parse flight details
@@ -128,7 +128,10 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
 
         {/* Actions */}
         <div className="p-stack-md border-t border-surface-variant flex flex-col md:flex-row gap-3">
-          <button className="w-full md:flex-1 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-fixed-variant transition-colors">
+          <button
+            onClick={() => navigate('/recovery/booking', { state: { flight, request: state.request, confidence } })}
+            className="w-full md:flex-1 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-fixed-variant transition-colors"
+          >
             Accept &amp; Book
             <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
           </button>

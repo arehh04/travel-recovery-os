@@ -10,6 +10,7 @@ import { EvidenceValidationPage } from './pages/EvidenceValidationPage';
 import { AlternativesPage } from './pages/AlternativesPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { BookingConfirmationPage } from './pages/BookingConfirmationPage';
 import './styles/app.css';
 
 export function App() {
@@ -22,6 +23,7 @@ export function App() {
         <Route path="/recovery/engine" element={<RecoveryEnginePage />} />
         <Route path="/recovery/evidence" element={<EvidenceValidationPage />} />
         <Route path="/recovery/alternatives" element={<AlternativesPage />} />
+        <Route path="/recovery/booking" element={<BookingConfirmationPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="*" element={<StartRecoveryPage />} />

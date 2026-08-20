@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from tros.api.db import get_connection, init_db
@@ -115,8 +113,6 @@ class TestMigrationRunner:
 
     def test_migration_tracking_table(self, db_path):
         """Migration tracking table records applied_at timestamp."""
-        import tros.api.migrations as mig_module
-        from pathlib import Path
 
         runner = MigrationRunner(db_path=db_path)
         runner._ensure_tracking_table()

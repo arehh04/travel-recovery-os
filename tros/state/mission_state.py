@@ -7,13 +7,12 @@ Agents communicate indirectly by reading and updating this state.
 from __future__ import annotations
 
 import copy
-from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
-from tros.schemas.mission import AuditEntry, MissionContext, MissionStatus
 from tros.schemas.agent_output import AgentOutput
+from tros.schemas.mission import AuditEntry, MissionContext, MissionStatus
 
 
 class SharedMissionState(BaseModel):
@@ -25,7 +24,7 @@ class SharedMissionState(BaseModel):
     trigger_event: str = ""
 
     # --- Immutable context (written by Context Agent only) ---
-    context: Optional[MissionContext] = None
+    context: MissionContext | None = None
 
     # --- Agent-owned sections ---
     flight: dict[str, Any] = Field(default_factory=dict)

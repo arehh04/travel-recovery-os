@@ -1,8 +1,8 @@
 """Stress tests — concurrent missions with mocked service (Phase 9)."""
 
 import os
-import time
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import MagicMock
 
@@ -10,9 +10,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from tros.api.app import create_app
-from tros.api.deps import reset_execution_manager, get_execution_manager
-from tros.api.settings import reset_settings_cache
+from tros.api.deps import get_execution_manager, reset_execution_manager
 from tros.api.rate_limit import reset_rate_limiters
+from tros.api.settings import reset_settings_cache
 
 
 @pytest.fixture(autouse=True)

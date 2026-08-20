@@ -11,8 +11,8 @@ from __future__ import annotations
 
 import threading
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 
 @dataclass
@@ -20,7 +20,7 @@ class IdempotencyEntry:
     """Cached execution result for an idempotency key."""
     key: str
     result: Any
-    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     status: str = "completed"
 
 
@@ -37,7 +37,7 @@ class IdempotencyStore:
         self._store: dict[str, IdempotencyEntry] = {}
         self._lock = threading.Lock()
 
-    def get(self, key: str) -> Optional[IdempotencyEntry]:
+    def get(self, key: str) -> IdempotencyEntry | None:
         """Retrieve cached result for a key, or None if not found."""
         with self._lock:
             return self._store.get(key)

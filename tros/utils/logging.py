@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import sys
 
+
 def get_logger(name: str) -> logging.Logger:
     """Return a configured logger for TR-OS modules."""
     logger = logging.getLogger(f"tros.{name}")

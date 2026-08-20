@@ -17,8 +17,7 @@ Stored as structured metadata — never as fake evidence.
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 
 @dataclass
@@ -72,7 +71,7 @@ class PerfTimer:
         self._start = time.monotonic()
         return self
 
-    def __exit__(self, *args: Any) -> None:
+    def __exit__(self, *args: object) -> None:
         elapsed = int((time.monotonic() - self._start) * 1000)
         setattr(self._metrics, self._field, elapsed)
 

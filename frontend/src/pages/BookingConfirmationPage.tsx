@@ -29,8 +29,8 @@ export function BookingConfirmationPage() {
   }
 
   const currency = flight.currency || request?.currency || 'USD';
-  const durationHours = Math.floor(flight.duration_minutes / 60);
-  const durationMins = flight.duration_minutes % 60;
+  const durationHours = Math.floor((flight.duration_minutes || 0) / 60);
+  const durationMins = (flight.duration_minutes || 0) % 60;
   const durationStr = `${durationHours}h ${durationMins}m`;
   const stopsLabel = flight.stops === 0 ? 'Direct' : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`;
 
@@ -69,7 +69,7 @@ export function BookingConfirmationPage() {
             </div>
             <div className="flex justify-between items-center">
               <span className="font-label-sm text-label-sm text-on-surface-variant">Total Paid</span>
-              <span className="font-headline-md text-headline-md text-primary">{currency} {flight.price.toFixed(2)}</span>
+              <span className="font-headline-md text-headline-md text-primary">{currency} {(flight.price || 0).toFixed(2)}</span>
             </div>
           </div>
           <button
@@ -110,7 +110,7 @@ export function BookingConfirmationPage() {
             </div>
           </div>
           <div className="text-right">
-            <div className="font-numeric-data text-numeric-data text-on-surface">{currency} {flight.price.toFixed(2)}</div>
+            <div className="font-numeric-data text-numeric-data text-on-surface">{currency} {(flight.price || 0).toFixed(2)}</div>
             <div className="font-label-sm text-label-sm text-on-surface-variant">Total price</div>
           </div>
         </div>
@@ -181,15 +181,15 @@ export function BookingConfirmationPage() {
         <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Price Summary</h3>
         <div className="flex justify-between items-center">
           <span className="font-body-md text-body-md text-on-surface-variant">Base fare</span>
-          <span className="font-body-md text-body-md text-on-surface">{currency} {(flight.price * 0.85).toFixed(2)}</span>
+          <span className="font-body-md text-body-md text-on-surface">{currency} {((flight.price || 0) * 0.85).toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="font-body-md text-body-md text-on-surface-variant">Taxes &amp; fees</span>
-          <span className="font-body-md text-body-md text-on-surface">{currency} {(flight.price * 0.15).toFixed(2)}</span>
+          <span className="font-body-md text-body-md text-on-surface">{currency} {((flight.price || 0) * 0.15).toFixed(2)}</span>
         </div>
         <div className="border-t border-outline-variant pt-3 flex justify-between items-center">
           <span className="font-headline-md text-headline-md text-on-surface">Total</span>
-          <span className="font-headline-md text-headline-md text-primary">{currency} {flight.price.toFixed(2)}</span>
+          <span className="font-headline-md text-headline-md text-primary">{currency} {(flight.price || 0).toFixed(2)}</span>
         </div>
       </section>
 

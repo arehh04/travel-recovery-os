@@ -6,8 +6,6 @@ a flight is recommended. Python verifies it against evidence.
 
 from __future__ import annotations
 
-from typing import Any, Optional
-
 from pydantic import BaseModel, Field
 
 from tros.llm.evidence import EvidenceBundle
@@ -18,7 +16,7 @@ class ValidationResult(BaseModel):
     valid: bool = False
     errors: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
-    validated_flight: Optional[str] = None
+    validated_flight: str | None = None
 
 
 def validate_recommendation(

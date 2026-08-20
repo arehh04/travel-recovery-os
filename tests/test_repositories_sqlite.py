@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import os
-import sqlite3
-import tempfile
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -23,7 +20,6 @@ from tros.api.repositories_sqlite import (
     SqliteExecutionRepository,
     SqliteMissionRepository,
 )
-from tros.execution.cancellation import CancellationToken
 
 
 @pytest.fixture
@@ -87,7 +83,7 @@ class TestSqliteExecutionRepository:
         repo.save(ex)
         ex.status = "COMPLETED"
         ex.progress = 1.0
-        ex.completed_at = datetime.now(timezone.utc)
+        ex.completed_at = datetime.now(UTC)
         repo.save(ex)
         result = repo.get_by_id("m1")
         assert result.status == "COMPLETED"

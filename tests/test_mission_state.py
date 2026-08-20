@@ -1,12 +1,13 @@
 """Tests for Shared Mission State (Blackboard)."""
 
-import pytest
-from tros.state.mission_state import SharedMissionState
-from tros.schemas.mission import (
-    DisruptionEvent, DisruptionType, MissionContext,
-    MissionStatus, TravelerProfile,
-)
 from tros.schemas.agent_output import AgentOutput, AgentStatus
+from tros.schemas.mission import (
+    DisruptionEvent,
+    DisruptionType,
+    MissionContext,
+    MissionStatus,
+)
+from tros.state.mission_state import SharedMissionState
 
 
 def _make_state() -> SharedMissionState:

@@ -18,7 +18,6 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from tros.agents.base import BaseAgent
 from tros.agents.budget import BudgetAgent
 from tros.agents.context import ContextAgent
 from tros.agents.critic import CriticAgent
@@ -29,7 +28,7 @@ from tros.agents.reflection import ReflectionAgent
 from tros.agents.stubs import TransportAgent, WeatherAgent
 from tros.agents.summary import SummaryAgent
 from tros.llm.tool_executor import ToolExecutor
-from tros.schemas.agent_output import AgentOutput, AgentStatus
+from tros.schemas.agent_output import AgentStatus
 from tros.schemas.mission import MissionStatus
 from tros.state.mission_state import SharedMissionState
 from tros.utils.logging import get_logger
@@ -196,9 +195,9 @@ class SupervisorAgent:
         Only factual Atlas data enters the evidence store.
         Comparison is fully deterministic.
         """
-        from tros.llm.evidence import build_evidence_bundle
         from tros.agents.flight.comparator import compare_candidates
         from tros.config import DEFAULT_CURRENCY
+        from tros.llm.evidence import build_evidence_bundle
 
         flight_data = state.flight
         if not flight_data:
@@ -265,13 +264,14 @@ class SupervisorAgent:
 
         All operations are deterministic. No LLM involvement.
         """
-        from tros.agents.flight.recommendation_validator import validate_recommendation
         from tros.agents.conflict_detector import detect_conflicts
         from tros.agents.flight.confidence import (
-            ConfidenceFactors, calculate_confidence,
+            ConfidenceFactors,
+            calculate_confidence,
         )
-        from tros.llm.evidence import EvidenceBundle
+        from tros.agents.flight.recommendation_validator import validate_recommendation
         from tros.config import DEFAULT_CURRENCY
+        from tros.llm.evidence import EvidenceBundle
 
         flight_data = state.flight
         best = flight_data.get("best_option", {}) if flight_data else {}
@@ -444,11 +444,11 @@ class SupervisorAgent:
         Uses the RecoveryEngine which reuses the existing ToolExecutor.
         Never creates a second Atlas execution path.
         """
-        from tros.agents.recovery.engine import RecoveryEngine
         from tros.agents.conflict_detector import ConflictReport
         from tros.agents.flight.recommendation_validator import ValidationResult
-        from tros.llm.evidence import EvidenceBundle
+        from tros.agents.recovery.engine import RecoveryEngine
         from tros.config import DEFAULT_CURRENCY
+        from tros.llm.evidence import EvidenceBundle
 
         self.logger.info("Phase 6: Recovery triggered — decision is conditional")
 

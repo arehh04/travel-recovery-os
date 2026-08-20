@@ -7,7 +7,7 @@ that action is allowed. All safety-critical decisions are deterministic.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -39,7 +39,7 @@ class RecoveryResult(BaseModel):
     reason: str = ""
     final_validation_valid: bool = False
     attempts_used: int = 0
-    final_candidate: Optional[str] = None
+    final_candidate: str | None = None
     final_confidence: float = 0.0
     actions_taken: list[RecoveryAction] = Field(default_factory=list)
 

@@ -24,6 +24,12 @@ export interface ConflictInfo {
   has_critical: boolean;
 }
 
+export interface GamificationStats {
+  time_saved_minutes: number;
+  money_saved: number;
+  carbon_offset_kg: number;
+}
+
 export interface ExecutionMetadata {
   mission_id: string;
   execution_id: string;
@@ -43,6 +49,7 @@ export interface MissionResult {
   recovery: RecoveryInfo;
   conflicts: ConflictInfo;
   execution_metadata: ExecutionMetadata;
+  gamification?: GamificationStats;
 }
 
 export interface MissionCreated {

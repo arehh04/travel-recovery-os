@@ -19,7 +19,7 @@ import time
 import uuid
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -30,9 +30,9 @@ from tros.api.config import (
     CORS_ORIGINS,
 )
 from tros.api.errors import mission_error_handler
-from tros.api.routes.missions import router as missions_router
-from tros.api.routes.health import router as health_router
 from tros.api.routes.events import router as events_router
+from tros.api.routes.health import router as health_router
+from tros.api.routes.missions import router as missions_router
 from tros.execution.errors import MissionError
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan — startup and shutdown."""
     # Startup — initialize database and run pending migrations (Phase 10)
-    from tros.api.settings import get_settings, Environment
+    from tros.api.settings import Environment, get_settings
     settings = get_settings()
     if settings.environment in (Environment.PRODUCTION, Environment.TESTING):
         try:
@@ -138,10 +138,12 @@ def create_app() -> FastAPI:
             },
         )
 
+    from tros.api.routes.webhooks import router as webhooks_router
     # --- Routes ---
     app.include_router(missions_router)
     app.include_router(health_router)
     app.include_router(events_router)
+    app.include_router(webhooks_router)
 
     # --- Root redirect to docs ---
     @app.get("/", include_in_schema=False)

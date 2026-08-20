@@ -5,7 +5,6 @@ import re
 
 import pytest
 
-
 # Regex patterns for secrets (not exhaustive, but covers common cases)
 _SECRET_PATTERNS = [
     re.compile(r"sk-[a-zA-Z0-9]{20,}"),  # DeepSeek/OpenAI keys
@@ -24,7 +23,7 @@ def _scan_file_for_secrets(filepath: str) -> list[str]:
             matches = pattern.findall(content)
             if matches:
                 findings.append(f"{filepath}: {matches[0][:20]}...")
-    except (IOError, UnicodeDecodeError):
+    except (OSError, UnicodeDecodeError):
         pass
     return findings
 
@@ -59,8 +58,9 @@ class TestNoSecretsInSource:
 class TestCORSConfig:
     def test_cors_not_wildcard_in_production(self):
         """Production config rejects wildcard CORS."""
-        from tros.api.settings import Settings, Environment
         from pydantic import ValidationError
+
+        from tros.api.settings import Environment, Settings
 
         with pytest.raises(ValidationError):
             Settings(environment=Environment.PRODUCTION, cors_origins="*")
@@ -69,9 +69,13 @@ class TestCORSConfig:
 class TestAuthNotLogged:
     def test_auth_headers_never_logged(self):
         """Auth-related values should never appear in log output."""
-        import logging
         import io
-        from tros.api.structured_logging import SecretScrubberFilter, StructuredFormatter
+        import logging
+
+        from tros.api.structured_logging import (
+            SecretScrubberFilter,
+            StructuredFormatter,
+        )
 
         # Set up a logger with our scrubber
         logger = logging.getLogger("test_security")
@@ -131,8 +135,9 @@ class TestRequestBodySize:
 class TestSecurityHeaders:
     def test_security_headers_in_app(self):
         """App should add security headers."""
-        from tros.api.app import create_app
         from fastapi.testclient import TestClient
+
+        from tros.api.app import create_app
 
         app = create_app()
         client = TestClient(app)

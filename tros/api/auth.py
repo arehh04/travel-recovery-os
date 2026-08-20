@@ -11,11 +11,9 @@ without authentication.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
-from fastapi import Depends, HTTPException, Request, Security
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import APIKeyHeader
-
 
 # Header for dev-mode authentication
 _dev_user_header = APIKeyHeader(name="X-Dev-User-Id", auto_error=False)

@@ -21,25 +21,21 @@ Future HTTP endpoints will call:
 
 from __future__ import annotations
 
-import time
-from typing import Any, Optional
+from typing import Any
 
 from tros.agents.supervisor import SupervisorAgent
 from tros.execution.cancellation import CancellationToken
 from tros.execution.context import ExecutionContext
 from tros.execution.errors import (
+    InternalMissionError,
     MissionError,
     ValidationError,
-    InternalMissionError,
 )
 from tros.execution.idempotency import IdempotencyStore
 from tros.execution.lifecycle import ExecutionStatus, validate_transition
 from tros.execution.logging import get_structured_logger
 from tros.execution.performance import PerformanceMetrics, PerfTimer
-from tros.schemas.mission import (
-    MissionContext, DisruptionEvent, DisruptionType, TravelerProfile, TravelerType,
-)
-from tros.service.result import MissionResult, ExecutionMetadata
+from tros.service.result import ExecutionMetadata, MissionResult
 from tros.state.mission_state import SharedMissionState
 from tros.utils.logging import get_logger
 
@@ -195,11 +191,11 @@ class MissionService:
             self._results[ctx.mission_id] = result
             return result
 
-    def get_result(self, mission_id: str) -> Optional[MissionResult]:
+    def get_result(self, mission_id: str) -> MissionResult | None:
         """Retrieve a cached mission result by ID."""
         return self._results.get(mission_id)
 
-    def get_status(self, mission_id: str) -> Optional[str]:
+    def get_status(self, mission_id: str) -> str | None:
         """Get the status of a cached mission."""
         result = self._results.get(mission_id)
         return result.status if result else None

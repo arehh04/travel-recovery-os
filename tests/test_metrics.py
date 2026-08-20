@@ -2,7 +2,11 @@
 
 import pytest
 
-from tros.api.metrics import MetricsCollector, get_metrics_collector, reset_metrics_collector
+from tros.api.metrics import (
+    MetricsCollector,
+    get_metrics_collector,
+    reset_metrics_collector,
+)
 
 
 @pytest.fixture(autouse=True)

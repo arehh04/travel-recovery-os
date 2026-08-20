@@ -5,19 +5,18 @@ from __future__ import annotations
 from fastapi import Request
 from fastapi.responses import JSONResponse
 
+from tros.api.models import ApiError, ErrorResponse
 from tros.execution.errors import (
-    MissionError,
-    ValidationError,
-    ConstraintViolationError,
     AtlasError,
     AtlasTimeoutError,
+    CancellationError,
+    ConstraintViolationError,
+    InternalMissionError,
     LLMError,
     LLMTimeoutError,
-    CancellationError,
-    InternalMissionError,
+    MissionError,
+    ValidationError,
 )
-from tros.api.models import ApiError, ErrorResponse
-
 
 # Error class → HTTP status code mapping
 _ERROR_STATUS_MAP: dict[type[MissionError], int] = {

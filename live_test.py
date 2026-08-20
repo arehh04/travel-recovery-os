@@ -1,10 +1,10 @@
 """Live scenario tests — 10 tests covering backend API + frontend pages."""
 
-import urllib.request
 import json
-import time
-import sys
 import os
+import sys
+import time
+import urllib.request
 
 BASE_URL = "http://localhost:8000/api/v1"
 # Auto-detect frontend port
@@ -253,11 +253,11 @@ except Exception as e:
 # Summary
 # ============================================================
 _print(f"\n{'='*60}")
-_print(f"LIVE SCENARIO TEST SUMMARY")
+_print("LIVE SCENARIO TEST SUMMARY")
 _print(f"{'='*60}")
 _print(f"  Passed: {PASS}/10")
 _print(f"  Failed: {FAIL}/10")
-_print(f"  Total:  10/10")
+_print("  Total:  10/10")
 _print(f"{'='*60}")
 with open(RESULTS_FILE, "w", encoding="utf-8") as f:
     f.write("\n".join(_output_lines))

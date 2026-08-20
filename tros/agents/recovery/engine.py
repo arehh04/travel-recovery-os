@@ -12,11 +12,11 @@ Re-evaluation re-runs the full Phase 5 deterministic pipeline on new evidence.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from tros.agents.conflict_detector import ConflictReport
-from tros.agents.flight.confidence import ConfidenceFactors, calculate_confidence
 from tros.agents.flight.comparator import compare_candidates
+from tros.agents.flight.confidence import ConfidenceFactors, calculate_confidence
 from tros.agents.flight.recommendation_validator import validate_recommendation
 from tros.agents.recovery.models import (
     RecoveryAction,
@@ -24,7 +24,7 @@ from tros.agents.recovery.models import (
     RecoveryHistoryEntry,
     RecoveryResult,
 )
-from tros.config import LLM_MAX_RECOVERY_ATTEMPTS, DEFAULT_CURRENCY
+from tros.config import DEFAULT_CURRENCY, LLM_MAX_RECOVERY_ATTEMPTS
 from tros.llm.evidence import EvidenceBundle, build_evidence_bundle
 from tros.utils.logging import get_logger
 
@@ -545,7 +545,6 @@ class RecoveryEngine:
         Returns: (validation_result, conflict_report, budget_assessment, confidence)
         """
         from tros.agents.conflict_detector import detect_conflicts
-        from tros.agents.flight.confidence import ConfidenceFactors, calculate_confidence
 
         mission_origin = mission_context.get("origin", "")
         mission_dest = mission_context.get("destination", "")

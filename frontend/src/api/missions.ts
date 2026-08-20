@@ -29,4 +29,8 @@ export const missionsApi = {
   cancel(missionId: string): Promise<CancelResponse> {
     return api.post<CancelResponse>(`/missions/${missionId}/cancel`);
   },
+
+  simulateWebhook(): Promise<{ status: string; message: string; mission_id: string }> {
+    return api.post<{ status: string; message: string; mission_id: string }>('/webhooks/simulate');
+  },
 };

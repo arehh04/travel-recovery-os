@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -23,7 +21,7 @@ class FlightCandidate(BaseModel):
     currency: str = "USD"
     base_fare: float = 0.0
     tax: float = 0.0
-    operating_carrier: Optional[str] = None
+    operating_carrier: str | None = None
     bookable: bool = False
     price_status: str = "reference"
 

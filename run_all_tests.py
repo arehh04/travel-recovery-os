@@ -1,10 +1,10 @@
 """Test runner: ensures backend is up, then runs live_test.py, writes results to file."""
+import json
+import os
 import subprocess
 import sys
-import os
 import time
 import urllib.request
-import json
 
 BASE = "http://localhost:8000/api/v1"
 RESULTS = os.path.join(os.path.dirname(__file__), "live_test_results.txt")

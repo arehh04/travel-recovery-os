@@ -22,3 +22,17 @@ tros = "tros.__main__:main"
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.ruff.lint]
+ignore = [
+    "B008",    # FastAPI Depends()
+    "B018",    # Useless expression
+    "BLE001",  # Blind exception
+    "DTZ",     # Datetime timezone rules
+    "PYI",     # Stub file rules
+    "SIM102",  # Nested ifs
+    "PLW1510", # subprocess run check=False
+    "S110",    # pass in except
+    "C408",    # dict() call
+    "PERF402", # list copy
+]

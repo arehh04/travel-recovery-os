@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel
-
 from tros.schemas.mission import DisruptionEvent, DisruptionType
 
 

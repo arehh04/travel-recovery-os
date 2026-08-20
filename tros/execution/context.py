@@ -12,10 +12,9 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
-from tros.config import LLM_PROVIDER, LLM_MODEL
+from tros.config import LLM_MODEL, LLM_PROVIDER
 
 
 @dataclass(frozen=True)
@@ -24,7 +23,7 @@ class ExecutionContext:
     mission_id: str
     execution_id: str
     request_id: str
-    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     provider: str = ""
     model: str = ""
 

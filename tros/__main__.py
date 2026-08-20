@@ -7,8 +7,6 @@ Usage:
 
 from __future__ import annotations
 
-import sys
-
 
 def main() -> None:
     from demo.run_demo import main as run_demo

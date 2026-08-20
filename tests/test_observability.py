@@ -9,11 +9,13 @@ import threading
 
 import pytest
 
-from tros.api.metrics import MetricsCollector, get_metrics_collector, reset_metrics_collector
+from tros.api.metrics import (
+    MetricsCollector,
+    reset_metrics_collector,
+)
 from tros.api.structured_logging import (
     RequestContextFilter,
     StructuredFormatter,
-    SecretScrubberFilter,
 )
 
 

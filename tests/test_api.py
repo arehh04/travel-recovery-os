@@ -17,36 +17,22 @@ Tests cover:
 
 from __future__ import annotations
 
-import time
 import pytest
-from unittest.mock import MagicMock, patch
-
 from fastapi.testclient import TestClient
 
 from tros.api.app import create_app
-from tros.api.deps import get_execution_manager, reset_execution_manager
-from tros.api.execution_manager import ExecutionManager
 from tros.api.auth import AuthContext
-from tros.api.models import (
-    MissionRequest,
-    MissionCreatedResponse,
-    MissionStatusResponse,
-    MissionResultResponse,
-    HealthResponse,
-    ErrorResponse,
-)
+from tros.api.deps import reset_execution_manager
 from tros.api.errors import error_to_http_status
+from tros.api.execution_manager import ExecutionManager
 from tros.execution.errors import (
-    ValidationError,
-    ConstraintViolationError,
     AtlasError,
-    LLMError,
     CancellationError,
+    ConstraintViolationError,
     InternalMissionError,
+    LLMError,
+    ValidationError,
 )
-from tros.execution.cancellation import CancellationToken
-from tros.service.result import MissionResult
-
 
 # -------------------------------------------------------------------
 # Fixtures
@@ -69,7 +55,8 @@ def client(app):
 def mock_manager():
     """Create an ExecutionManager with mocked MissionService."""
     manager = ExecutionManager(llm_client=None, max_workers=2)
-    return manager
+    yield manager
+    manager.shutdown(wait=True)
 
 
 # =====================================================================

@@ -1,15 +1,12 @@
 """Tests for Phase 9 auth provider abstraction."""
 
-import json
 import os
 import time
-from base64 import b64encode
 from unittest.mock import MagicMock
 
 import pytest
 from fastapi import HTTPException
 
-from tros.api.auth import AuthContext
 from tros.api.auth_providers import (
     BearerTokenProvider,
     DevAuthProvider,

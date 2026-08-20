@@ -6,15 +6,15 @@ without real DeepSeek/Atlas calls.
 
 import os
 import time
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
 
 from tros.api.app import create_app
-from tros.api.deps import reset_execution_manager, get_execution_manager
-from tros.api.settings import reset_settings_cache
+from tros.api.deps import get_execution_manager, reset_execution_manager
 from tros.api.rate_limit import reset_rate_limiters
+from tros.api.settings import reset_settings_cache
 from tros.service.result import MissionResult
 
 

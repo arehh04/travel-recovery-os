@@ -14,15 +14,15 @@ Safety boundaries:
 from __future__ import annotations
 
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
-from tros.config import DEFAULT_CURRENCY
 from tros.adapters.flight import (
     AtlasAdapterError,
     AtlasFlightAdapter,
     normalize_search_response,
 )
+from tros.config import DEFAULT_CURRENCY
 from tros.llm.react_models import ToolObservation
 from tros.utils.logging import get_logger
 

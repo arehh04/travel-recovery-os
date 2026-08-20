@@ -14,8 +14,8 @@ from __future__ import annotations
 import json
 import logging
 import sqlite3
-from datetime import datetime, timezone
-from typing import Any, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 from tros.api.db import get_connection
 from tros.api.execution_manager import MissionExecution
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class SqliteExecutionRepository:
         finally:
             conn.close()
 
-    def get_by_id(self, mission_id: str) -> Optional[MissionExecution]:
+    def get_by_id(self, mission_id: str) -> MissionExecution | None:
         conn = self._conn()
         try:
             row = conn.execute(
@@ -163,7 +163,7 @@ class SqliteMissionRepository:
         finally:
             conn.close()
 
-    def get_result(self, mission_id: str) -> Optional[Any]:
+    def get_result(self, mission_id: str) -> Any | None:
         conn = self._conn()
         try:
             row = conn.execute(
@@ -222,7 +222,7 @@ class SqliteMissionRepository:
         finally:
             conn.close()
 
-    def check_idempotency_key(self, key: str) -> Optional[str]:
+    def check_idempotency_key(self, key: str) -> str | None:
         """Return mission_id if idempotency key exists, else None."""
         conn = self._conn()
         try:

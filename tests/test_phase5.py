@@ -14,25 +14,24 @@ Tests cover:
 
 from __future__ import annotations
 
-import pytest
-from unittest.mock import MagicMock
-
-from tros.llm.evidence import CandidateEvidence, EvidenceBundle, build_evidence_bundle
-from tros.agents.flight.comparator import compare_candidates, ComparisonReport
-from tros.agents.flight.recommendation_validator import (
-    validate_recommendation, ValidationResult,
-)
+from tros.agents.conflict_detector import detect_conflicts
+from tros.agents.flight.comparator import compare_candidates
 from tros.agents.flight.confidence import (
-    ConfidenceFactors, ConfidenceResult, calculate_confidence,
+    ConfidenceFactors,
+    calculate_confidence,
 )
-from tros.agents.conflict_detector import detect_conflicts, ConflictReport
+from tros.agents.flight.recommendation_validator import (
+    validate_recommendation,
+)
+from tros.llm.evidence import EvidenceBundle, build_evidence_bundle
 from tros.schemas.agent_output import AgentOutput, AgentStatus
-from tros.schemas.flight import FlightCandidate, RankedFlight
 from tros.schemas.mission import (
-    MissionContext, DisruptionEvent, DisruptionType, TravelerProfile,
+    DisruptionEvent,
+    DisruptionType,
+    MissionContext,
+    TravelerProfile,
 )
 from tros.state.mission_state import SharedMissionState
-
 
 # =====================================================================
 # Helpers

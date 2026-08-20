@@ -20,7 +20,6 @@ from tros.config import (
     LLM_BASE_URL,
     LLM_MAX_TOKENS,
     LLM_MODEL,
-    LLM_PROVIDER,
     LLM_TEMPERATURE,
     LLM_TIMEOUT,
 )

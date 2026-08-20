@@ -10,15 +10,15 @@ a real API key. They verify:
 
 from __future__ import annotations
 
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from tros.schemas.agent_output import AgentOutput, AgentStatus
 from tros.schemas.mission import (
-    MissionContext, DisruptionEvent, DisruptionType,
+    DisruptionEvent,
+    DisruptionType,
+    MissionContext,
 )
 from tros.state.mission_state import SharedMissionState
-
 
 # =====================================================================
 # Fixtures

@@ -11,12 +11,11 @@ Bug report (TR467 KUL->NRT):
 - After fix:  arrival_airport=NRT, duration=1940min (CORRECT)
 """
 
-import pytest
 from tros.adapters.flight.normalizer import (
-    normalize_search_response,
-    _normalize_offer,
     _compute_itinerary_duration,
+    _normalize_offer,
     _parse_segment_datetime,
+    normalize_search_response,
 )
 
 

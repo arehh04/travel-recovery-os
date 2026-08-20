@@ -12,7 +12,7 @@ Safety: No secrets (API keys, tokens) are ever stored in these models.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -29,9 +29,9 @@ class ReActTraceStep(BaseModel):
     step_number: int
     phase: str  # THOUGHT | ACTION | OBSERVATION | FINAL
     thought: str = ""
-    tool_name: Optional[str] = None
-    tool_arguments: Optional[dict[str, Any]] = None
-    observation: Optional[dict[str, Any]] = None
+    tool_name: str | None = None
+    tool_arguments: dict[str, Any] | None = None
+    observation: dict[str, Any] | None = None
     duration_ms: int = 0
     success: bool = True
 
@@ -44,11 +44,11 @@ class ToolObservation(BaseModel):
     """
     tool: str
     success: bool
-    search_id: Optional[str] = None
+    search_id: str | None = None
     candidate_count: int = 0
     candidates: list[dict[str, Any]] = Field(default_factory=list)
-    error_code: Optional[str] = None
-    message: Optional[str] = None
+    error_code: str | None = None
+    message: str | None = None
 
 
 class ReActFinalDecision(BaseModel):
@@ -61,4 +61,4 @@ class ReActFinalDecision(BaseModel):
     decision: str = "recommend"  # recommend | no_viable_option
     reasoning_summary: str = ""
     confidence: float = Field(default=0.5, ge=0.0, le=1.0)
-    selected_flight_number: Optional[str] = None
+    selected_flight_number: str | None = None

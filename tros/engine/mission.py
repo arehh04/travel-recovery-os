@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from tros.schemas.mission import (
     DisruptionEvent,
-    MissionContext,
     MissionStatus,
     TravelerProfile,
     generate_mission_id,

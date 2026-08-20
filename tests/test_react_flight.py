@@ -16,19 +16,22 @@ without requiring real API keys or CLI calls. Verifies:
 from __future__ import annotations
 
 import json
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
-from tros.llm.react_models import ReActTraceStep, ToolObservation, ReActFinalDecision
-from tros.llm.response_parser import parse_react_flight_response, parse_tool_call_response
+from tros.llm.react_models import ReActFinalDecision, ReActTraceStep, ToolObservation
+from tros.llm.response_parser import (
+    parse_react_flight_response,
+    parse_tool_call_response,
+)
 from tros.llm.tool_executor import ToolExecutor
-from tros.schemas.agent_output import AgentOutput, AgentStatus
-from tros.schemas.flight import FlightCandidate, RankedFlight
+from tros.schemas.agent_output import AgentStatus
 from tros.schemas.mission import (
-    MissionContext, DisruptionEvent, DisruptionType, TravelerProfile,
+    DisruptionEvent,
+    DisruptionType,
+    MissionContext,
+    TravelerProfile,
 )
 from tros.state.mission_state import SharedMissionState
-
 
 # =====================================================================
 # Helpers

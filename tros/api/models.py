@@ -6,11 +6,9 @@ Maps to/from MissionService inputs and MissionResult outputs.
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
-
 
 # -------------------------------------------------------------------
 # Requests
@@ -60,6 +58,13 @@ class RecoveryInfoResponse(BaseModel):
     recovered: bool = False
 
 
+class GamificationStatsResponse(BaseModel):
+    """Hackathon stats for time and money saved."""
+    time_saved_minutes: int = 0
+    money_saved: float = 0.0
+    carbon_offset_kg: float = 0.0
+
+
 class ConflictInfoResponse(BaseModel):
     """Public conflict summary."""
     count: int = 0
@@ -80,13 +85,14 @@ class MissionResultResponse(BaseModel):
     mission_id: str
     execution_id: str
     status: str
-    recommendation: Optional[FlightInfoResponse] = None
+    recommendation: FlightInfoResponse | None = None
     alternatives: list[FlightInfoResponse] = Field(default_factory=list)
     budget: dict[str, Any] = Field(default_factory=dict)
     confidence: float = 0.0
     recovery: RecoveryInfoResponse = Field(default_factory=RecoveryInfoResponse)
     conflicts: ConflictInfoResponse = Field(default_factory=ConflictInfoResponse)
     execution_metadata: ExecutionMetadataResponse = Field(default_factory=ExecutionMetadataResponse)
+    gamification: GamificationStatsResponse = Field(default_factory=GamificationStatsResponse)
 
 
 class MissionStatusResponse(BaseModel):

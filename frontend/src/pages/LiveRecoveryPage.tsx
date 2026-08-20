@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useMission } from '../hooks/useMission';
 import type { MissionRequest } from '../api/types';
 import type { PhaseStep } from '../types/app';
+import { AgentTerminal } from '../components/AgentTerminal';
 
 const PHASE_STEPS: PhaseStep[] = [
   { label: 'Mission understood', state: 'pending' },
@@ -198,12 +199,19 @@ export function LiveRecoveryPage() {
       </section>
 
       {/* Bottom Status Indicator */}
-      <div className="flex justify-center mt-4 mb-8">
+      <div className="flex justify-center mt-4 mb-2">
         <div className="inline-flex items-center gap-3 bg-surface/80 backdrop-blur-md border border-outline-variant/50 px-5 py-3 rounded-full shadow-sm">
           <span className="material-symbols-outlined text-primary animate-[spin_3s_linear_infinite] text-[18px]">sync</span>
           <span className="font-label-sm text-label-sm text-on-surface-variant tracking-wide">Navires is evaluating your options...</span>
         </div>
       </div>
+
+      {/* Agent Terminal */}
+      {missionId && isRunning && (
+        <section className="w-full max-w-2xl mx-auto mb-8">
+          <AgentTerminal missionId={missionId} />
+        </section>
+      )}
 
       {/* Cancel button */}
       {missionId && state.phase === 'running' && (

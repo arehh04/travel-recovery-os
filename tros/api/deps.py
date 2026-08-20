@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from functools import lru_cache
 from typing import Any
 
 from tros.api.execution_manager import ExecutionManager
 from tros.api.settings import Environment, get_settings
 from tros.llm.client import LLMClient
-
 
 # Singleton execution manager (created once per process)
 _manager: ExecutionManager | None = None

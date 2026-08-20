@@ -1,9 +1,8 @@
 """Tests for Phase 9 Docker & deployment hardening."""
 
 import os
-import yaml
 
-import pytest
+import yaml
 
 
 class TestDockerfile:

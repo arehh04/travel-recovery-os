@@ -1,7 +1,11 @@
 /** Recovery Plan page — stitch recommendation card with dynamic data. */
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import type { MissionResult } from '../api/types';
+import { GamificationStats } from '../components/GamificationStats';
+import { FlightRouteMap } from '../components/FlightRouteMap';
+import { missionsApi } from '../api/missions';
 
 interface Props {
   result?: MissionResult;
@@ -10,9 +14,38 @@ interface Props {
 export function RecoveryPlanPage({ result: propResult }: Props = {}) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const missionId = searchParams.get('mission_id');
+
+  const [loading, setLoading] = useState(false);
+  const [fetchedResult, setFetchedResult] = useState<MissionResult | null>(null);
 
   const state = (location.state as { result?: MissionResult; request?: { origin: string; destination: string; budget_limit: number; currency: string } }) || {};
-  const result = propResult || state.result;
+  const result = propResult || state.result || fetchedResult;
+
+  useEffect(() => {
+    if (!propResult && !state.result && missionId) {
+      setLoading(true);
+      missionsApi.getResult(missionId).then((res) => {
+        setFetchedResult(res);
+        setLoading(false);
+      }).catch((e) => {
+        console.error('Failed to load magic link mission:', e);
+        setLoading(false);
+      });
+    }
+  }, [missionId, propResult, state.result]);
+
+  if (loading) {
+    return (
+      <main className="flex-1 flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-secondary/30 border-t-secondary rounded-full animate-spin"></div>
+          <p className="font-label-md text-secondary">Loading recovery plan...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!result) {
     return (
@@ -88,7 +121,7 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
           {/* Departure */}
           <div className="flex flex-col md:items-start text-center md:text-left w-full md:w-auto">
             <div className="font-headline-md text-headline-md text-on-surface">{depTime}</div>
-            <div className="font-label-md text-label-md text-on-surface-variant">{state.request?.origin || 'Origin'}</div>
+            <div className="font-label-md text-label-md text-on-surface-variant">{state.request?.origin || 'KUL'}</div>
           </div>
           {/* Connection/Duration */}
           <div className="flex flex-col items-center flex-1 w-full relative px-4 py-6 md:py-0">
@@ -104,8 +137,13 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
           {/* Arrival */}
           <div className="flex flex-col md:items-end text-center md:text-right w-full md:w-auto">
             <div className="font-headline-md text-headline-md text-on-surface">{arrTime}</div>
-            <div className="font-label-md text-label-md text-on-surface-variant">{state.request?.destination || 'Destination'}</div>
+            <div className="font-label-md text-label-md text-on-surface-variant">{state.request?.destination || 'SIN'}</div>
           </div>
+        </div>
+
+        {/* Flight Route Map */}
+        <div className="w-full bg-surface">
+          <FlightRouteMap origin={state.request?.origin || 'KUL'} destination={state.request?.destination || 'SIN'} />
         </div>
 
         {/* Confidence Indicator */}
@@ -126,10 +164,14 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
           <span className="material-symbols-outlined text-secondary">analytics</span>
         </div>
 
-        {/* Actions */}
         <div className="p-stack-md border-t border-surface-variant flex flex-col md:flex-row gap-3">
           <button
-            onClick={() => navigate('/recovery/booking', { state: { flight, request: state.request, confidence } })}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigate('/recovery/booking', { state: { flight, request: state.request, confidence } });
+            }}
             className="w-full md:flex-1 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-fixed-variant transition-colors"
           >
             Accept &amp; Book
@@ -138,8 +180,11 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
         </div>
       </section>
 
+      {/* Gamification Dashboard */}
+      {result.gamification && <GamificationStats stats={result.gamification} />}
+
       {/* Why this flight? */}
-      <section className="flex flex-col gap-stack-md">
+      <section className="flex flex-col gap-stack-md mt-8">
         <h2 className="font-headline-md text-headline-md text-on-background">Why this flight?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[

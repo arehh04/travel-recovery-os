@@ -7,7 +7,7 @@ stored as factual flight evidence.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -25,7 +25,7 @@ class CandidateEvidence(BaseModel):
     currency: str
     deterministic_score: float
     source: str = "atlas_search"
-    search_id: Optional[str] = None
+    search_id: str | None = None
     evidence_type: str = "atlas_search"
     carrier: str = ""
     offer_id: str = ""

@@ -21,11 +21,15 @@ import json
 import time
 from typing import Any
 
-from tros.adapters.flight import AtlasFlightAdapter, AtlasAdapterError, normalize_search_response
+from tros.adapters.flight import (
+    AtlasAdapterError,
+    AtlasFlightAdapter,
+    normalize_search_response,
+)
 from tros.agents.base import BaseAgent
 from tros.agents.flight.ranking import rank_candidates
 from tros.config import LLM_MAX_TOOL_CALLS
-from tros.llm.react_models import ReActFinalDecision, ReActTraceStep, ToolObservation
+from tros.llm.react_models import ReActTraceStep
 from tros.llm.tool_executor import ToolExecutor
 from tros.schemas.agent_output import AgentOutput, AgentStatus
 from tros.schemas.flight import FlightRecommendation

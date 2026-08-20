@@ -1,8 +1,7 @@
 """End-to-end test for the cancelled flight demo scenario."""
 
-import pytest
-from tros.schemas.mission import MissionStatus
 from tros.schemas.agent_output import AgentStatus
+from tros.schemas.mission import MissionStatus
 
 
 class TestDemoScenario:
@@ -55,8 +54,8 @@ class TestDemoScenario:
     def test_critic_agent(self):
         """Test Critic Agent with a flight output present."""
         from tros.agents.critic import CriticAgent
-        from tros.state.mission_state import SharedMissionState
         from tros.schemas.agent_output import AgentOutput
+        from tros.state.mission_state import SharedMissionState
 
         state = SharedMissionState(mission_id="test-critic")
         flight_output = AgentOutput(
@@ -70,7 +69,7 @@ class TestDemoScenario:
             "best_option": {"candidate": {"price": 400}}
         }, "FlightAgent")
 
-        from tros.schemas.mission import MissionContext, DisruptionEvent, DisruptionType
+        from tros.schemas.mission import DisruptionEvent, DisruptionType, MissionContext
         state.set_context(MissionContext(
             origin="KUL", destination="NRT", departure_date="2026-08-20",
             disruption=DisruptionEvent(
@@ -87,8 +86,8 @@ class TestDemoScenario:
     def test_summary_agent_produces_text(self):
         """Test that Summary Agent generates a recovery plan."""
         from tros.agents.summary import SummaryAgent
+        from tros.schemas.mission import DisruptionEvent, DisruptionType, MissionContext
         from tros.state.mission_state import SharedMissionState
-        from tros.schemas.mission import MissionContext, DisruptionEvent, DisruptionType
 
         state = SharedMissionState(mission_id="test-summary")
         state.set_context(MissionContext(

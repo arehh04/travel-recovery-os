@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from tros.api.db import get_connection
@@ -32,7 +32,7 @@ _BLOCKED_KEYWORDS = {"DROP TABLE", "DROP INDEX", "TRUNCATE"}
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 class MigrationRunner:

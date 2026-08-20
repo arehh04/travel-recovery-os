@@ -7,11 +7,9 @@ Python logic.
 
 from __future__ import annotations
 
-from typing import Any, Optional
-
 from pydantic import BaseModel, Field
 
-from tros.llm.evidence import CandidateEvidence, EvidenceBundle
+from tros.llm.evidence import EvidenceBundle
 
 
 class CandidateComparison(BaseModel):
@@ -27,7 +25,7 @@ class CandidateComparison(BaseModel):
 
 class ComparisonReport(BaseModel):
     """Full comparison report across all candidates."""
-    recommended: Optional[CandidateComparison] = None
+    recommended: CandidateComparison | None = None
     alternatives: list[CandidateComparison] = Field(default_factory=list)
     comparison_basis: list[str] = Field(default_factory=list)
 

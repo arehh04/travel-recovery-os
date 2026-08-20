@@ -14,7 +14,6 @@ from fastapi.testclient import TestClient
 
 from tros.api.settings import reset_settings_cache
 
-
 _SECRET_PATTERNS = [
     re.compile(r"sk-[a-zA-Z0-9]{20,}"),
     re.compile(r"Bearer [A-Za-z0-9_\-\.]{20,}"),

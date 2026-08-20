@@ -1,19 +1,20 @@
 """Tests for Phase 9 execution manager hardening."""
 
 import os
-import time
 import threading
-from unittest.mock import MagicMock, patch
+import time
+from datetime import UTC
+from unittest.mock import MagicMock
 
 import pytest
 
+from tros.api.deps import reset_execution_manager
 from tros.api.execution_manager import (
     ExecutionManager,
     MissionExecution,
     QueueFullError,
 )
 from tros.api.settings import reset_settings_cache
-from tros.api.deps import reset_execution_manager
 
 
 @pytest.fixture(autouse=True)
@@ -73,12 +74,12 @@ class TestCleanupOldMissions:
     def test_cleanup_completed(self):
         manager = ExecutionManager(llm_client=None, idempotency_ttl_sec=1)
         # Manually add a completed mission
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta
         execution = MissionExecution(
             mission_id="m1",
             execution_id="e1",
             status="COMPLETED",
-            completed_at=datetime.now(timezone.utc) - timedelta(seconds=10),
+            completed_at=datetime.now(UTC) - timedelta(seconds=10),
         )
         with manager._lock:
             manager._missions["m1"] = execution
@@ -89,7 +90,7 @@ class TestCleanupOldMissions:
 
     def test_cleanup_preserves_active(self):
         manager = ExecutionManager(llm_client=None, idempotency_ttl_sec=1)
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta
         # Active mission
         active = MissionExecution(
             mission_id="m1",
@@ -101,7 +102,7 @@ class TestCleanupOldMissions:
             mission_id="m2",
             execution_id="e2",
             status="COMPLETED",
-            completed_at=datetime.now(timezone.utc) - timedelta(seconds=10),
+            completed_at=datetime.now(UTC) - timedelta(seconds=10),
         )
         with manager._lock:
             manager._missions["m1"] = active

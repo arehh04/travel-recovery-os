@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from tros.config import LLM_API_KEY, LLM_PROVIDER, LLM_MODEL, ATLAS_CLI_BINARY
+from tros.config import ATLAS_CLI_BINARY, LLM_API_KEY, LLM_MODEL, LLM_PROVIDER
 
 
 class HealthStatus(str, Enum):

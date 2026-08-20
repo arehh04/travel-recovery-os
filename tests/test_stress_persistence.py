@@ -4,11 +4,10 @@ from __future__ import annotations
 
 import threading
 import time
-from datetime import datetime, timezone
 
 import pytest
 
-from tros.api.db import init_db, get_connection
+from tros.api.db import init_db
 from tros.api.execution_manager import MissionExecution
 from tros.api.repositories_sqlite import (
     SqliteEventRepository,
@@ -61,7 +60,7 @@ class TestConcurrentWrites:
 
         def insert_key(idx):
             try:
-                repo.save_idempotency_key(f"shared-key", f"mission-{idx}")
+                repo.save_idempotency_key("shared-key", f"mission-{idx}")
             except Exception as e:
                 errors.append(e)
 

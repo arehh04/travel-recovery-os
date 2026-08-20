@@ -1,10 +1,10 @@
 """Live end-to-end integration test — POST mission, poll status, get result."""
 
 import json
+import sys
 import time
 import urllib.request
 import uuid
-import sys
 
 BASE = "http://127.0.0.1:8765/api/v1"
 

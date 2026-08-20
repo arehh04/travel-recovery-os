@@ -12,10 +12,7 @@ import json
 import logging
 import re
 import threading
-import time
-from datetime import datetime, timezone
-from typing import Optional
-
+from datetime import UTC, datetime
 
 # ---------------------------------------------------------------------------
 # Secret Scrubber
@@ -79,7 +76,7 @@ class StructuredFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         log_entry = {
-            "timestamp": datetime.fromtimestamp(record.created, tz=timezone.utc).isoformat(),
+            "timestamp": datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
             "level": record.levelname,
             "event": record.name,
             "message": record.getMessage(),

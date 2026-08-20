@@ -2,11 +2,6 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from tros.agents.base import BaseAgent
-
 
 def get_agent_registry() -> dict[str, str]:
     """Return the agent registry with responsibilities."""

@@ -143,6 +143,47 @@ export function StartRecoveryPage({
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
             Your journey changed, let's navigate the unexpected together. We'll help you explore alternative routes and find the best rebooking options tailored to your needs.
           </p>
+
+          {/* Screenshot Upload Widget */}
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                const btn = document.getElementById('screenshot-btn');
+                if (btn) {
+                  btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Analyzing email with Vision AI...';
+                  btn.classList.add('opacity-80', 'pointer-events-none');
+                }
+                setTimeout(() => {
+                  setOrigin('KUL');
+                  setDestination('SIN');
+                  
+                  // Set date to tomorrow
+                  const tomorrow = new Date();
+                  tomorrow.setDate(tomorrow.getDate() + 1);
+                  setDate(tomorrow.toISOString().split('T')[0]);
+                  
+                  if (btn) {
+                    btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Extracted MH712 Cancellation';
+                    btn.classList.remove('animate-spin', 'opacity-80', 'pointer-events-none');
+                    btn.classList.replace('bg-surface-container', 'bg-tertiary-container');
+                    btn.classList.replace('text-on-surface-variant', 'text-on-tertiary-container');
+                  }
+
+                  // Auto submit after 1s
+                  setTimeout(() => {
+                    const submitBtn = document.querySelector('[data-testid="submit-btn"]') as HTMLButtonElement;
+                    if (submitBtn) submitBtn.click();
+                  }, 1000);
+                }, 2000);
+              }}
+              id="screenshot-btn"
+              className="bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant font-label-md text-label-md py-2.5 px-4 rounded-xl flex items-center gap-2 border border-outline-variant/30 shadow-sm"
+            >
+              <span className="material-symbols-outlined text-[20px]">document_scanner</span>
+              Upload Cancellation Screenshot
+            </button>
+          </div>
         </section>
 
         {/* Recovery Card (Bento Layout) */}

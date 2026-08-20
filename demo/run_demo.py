@@ -6,13 +6,11 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import time
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
 from demo.scenarios.cancelled_flight import run_cancelled_flight_demo
 from tros.config import LLM_API_KEY

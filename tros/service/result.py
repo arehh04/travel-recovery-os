@@ -8,7 +8,7 @@ debug traces, internal exceptions, API credentials.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -61,7 +61,7 @@ class MissionResult:
     mission_id: str = ""
     execution_id: str = ""
     status: str = ""
-    recommendation: Optional[FlightInfo] = None
+    recommendation: FlightInfo | None = None
     alternatives: list[FlightInfo] = field(default_factory=list)
     budget: dict[str, Any] = field(default_factory=dict)
     confidence: float = 0.0

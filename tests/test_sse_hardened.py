@@ -1,15 +1,10 @@
 """Tests for Phase 9 SSE hardening."""
 
-import asyncio
-import json
 import os
-import queue
-import time
-from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from tros.api.routes.events import _format_sse, _next_event_id, _sanitize_event, _event_counter
+from tros.api.routes.events import _format_sse, _next_event_id, _sanitize_event
 from tros.api.settings import reset_settings_cache
 
 

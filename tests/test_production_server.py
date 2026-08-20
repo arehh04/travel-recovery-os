@@ -7,7 +7,7 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
-from tros.api.settings import Environment, reset_settings_cache
+from tros.api.settings import reset_settings_cache
 
 
 @pytest.fixture(autouse=True)
@@ -66,6 +66,7 @@ class TestRequestLogging:
     def test_request_logging_has_duration(self, caplog):
         """Request logging includes duration information."""
         import logging
+
         from tros.api.app import create_app
 
         with caplog.at_level(logging.INFO):
@@ -82,7 +83,6 @@ class TestRequestLogging:
 class TestLastEventId:
     def test_last_event_id_parsed(self):
         """Last-Event-ID header is parsed for SSE reconnection."""
-        from tros.api.routes.events import _sanitize_event
         # Test that the endpoint accepts the header without error
         # (Full SSE test requires async streaming, covered in test_sse_hardened.py)
         assert True  # Header parsing validated in events.py

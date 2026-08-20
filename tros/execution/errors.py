@@ -13,7 +13,7 @@ Never exposes: stack traces to end users, API credentials, raw provider errors.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 
 class MissionError(Exception):
@@ -27,7 +27,7 @@ class MissionError(Exception):
         retryable: bool = False,
         phase: str = "",
         agent: str = "",
-        details: Optional[dict[str, Any]] = None,
+        details: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(message)
         self.error_code = error_code

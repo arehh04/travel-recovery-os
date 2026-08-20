@@ -13,7 +13,12 @@ import subprocess
 import time
 from typing import Any
 
-from tros.config import ATLAS_CLI_BINARY, ATLAS_SEARCH_TIMEOUT_SECONDS, MAX_RETRIES, RETRY_DELAY_SECONDS
+from tros.config import (
+    ATLAS_CLI_BINARY,
+    ATLAS_SEARCH_TIMEOUT_SECONDS,
+    MAX_RETRIES,
+    RETRY_DELAY_SECONDS,
+)
 from tros.utils.logging import get_logger
 
 logger = get_logger("AtlasAdapter")

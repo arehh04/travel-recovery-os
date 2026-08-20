@@ -17,8 +17,8 @@ from __future__ import annotations
 import json
 import logging
 import time
-from datetime import datetime, timezone
-from typing import Any, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 
 class StructuredLogger:
@@ -47,7 +47,7 @@ class StructuredLogger:
     ) -> None:
         """Log a structured event."""
         record = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "level": logging.getLevelName(level),
             "event_name": event_name,
             **self._execution_context,
@@ -86,5 +86,5 @@ class Timer:
         self._start = time.monotonic()
         return self
 
-    def __exit__(self, *args: Any) -> None:
+    def __exit__(self, *args: object) -> None:
         self.elapsed_ms = int((time.monotonic() - self._start) * 1000)

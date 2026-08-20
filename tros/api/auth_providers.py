@@ -15,7 +15,6 @@ import json
 import logging
 import time
 from base64 import b64decode, b64encode
-from dataclasses import dataclass
 from typing import Protocol
 
 from fastapi import HTTPException, Request

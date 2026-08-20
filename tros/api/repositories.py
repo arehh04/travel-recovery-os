@@ -12,11 +12,9 @@ Repositories:
 from __future__ import annotations
 
 import threading
-from datetime import datetime, timezone
-from typing import Any, Optional, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from tros.api.execution_manager import MissionExecution
-
 
 # ---------------------------------------------------------------------------
 # Repository Protocols
@@ -27,7 +25,7 @@ class ExecutionRepository(Protocol):
     """Protocol for mission execution persistence."""
 
     def save(self, execution: MissionExecution) -> None: ...
-    def get_by_id(self, mission_id: str) -> Optional[MissionExecution]: ...
+    def get_by_id(self, mission_id: str) -> MissionExecution | None: ...
     def get_all(self) -> list[MissionExecution]: ...
     def delete(self, mission_id: str) -> bool: ...
 
@@ -37,7 +35,7 @@ class MissionRepository(Protocol):
     """Protocol for mission result persistence."""
 
     def save_result(self, mission_id: str, result: Any) -> None: ...
-    def get_result(self, mission_id: str) -> Optional[Any]: ...
+    def get_result(self, mission_id: str) -> Any | None: ...
     def list_missions(self) -> list[str]: ...
 
 
@@ -65,7 +63,7 @@ class InMemoryExecutionRepository:
         with self._lock:
             self._store[execution.mission_id] = execution
 
-    def get_by_id(self, mission_id: str) -> Optional[MissionExecution]:
+    def get_by_id(self, mission_id: str) -> MissionExecution | None:
         with self._lock:
             return self._store.get(mission_id)
 
@@ -89,7 +87,7 @@ class InMemoryMissionRepository:
         with self._lock:
             self._results[mission_id] = result
 
-    def get_result(self, mission_id: str) -> Optional[Any]:
+    def get_result(self, mission_id: str) -> Any | None:
         with self._lock:
             return self._results.get(mission_id)
 

@@ -9,19 +9,15 @@ Provides:
 
 from __future__ import annotations
 
-import asyncio
-import time
 import threading
+import time
 from collections import defaultdict
-from dataclasses import dataclass
-from typing import Optional
 
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
 from tros.api.settings import get_settings
-
 
 # ---------------------------------------------------------------------------
 # Rate Limiter
@@ -100,8 +96,8 @@ class MaxConcurrencyGuard:
 # Module-level instances (created lazily)
 # ---------------------------------------------------------------------------
 
-_rate_limiter: Optional[InMemoryRateLimiter] = None
-_concurrency_guard: Optional[MaxConcurrencyGuard] = None
+_rate_limiter: InMemoryRateLimiter | None = None
+_concurrency_guard: MaxConcurrencyGuard | None = None
 
 
 def get_rate_limiter() -> InMemoryRateLimiter:

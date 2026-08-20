@@ -1,7 +1,7 @@
 """Quick status check for a mission."""
-import urllib.request
 import json
 import sys
+import urllib.request
 
 mission_id = sys.argv[1] if len(sys.argv) > 1 else "mission-b195c140e2c5"
 try:

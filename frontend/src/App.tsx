@@ -13,6 +13,8 @@ import { ProfilePage } from './pages/ProfilePage';
 import { BookingConfirmationPage } from './pages/BookingConfirmationPage';
 import './styles/app.css';
 
+// TR-OS PWA Phase 10
+
 export function App() {
   return (
     <Routes>

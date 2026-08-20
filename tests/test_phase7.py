@@ -21,30 +21,40 @@ from __future__ import annotations
 
 import json
 import logging
-import pytest
+from datetime import datetime
 from unittest.mock import MagicMock, patch
-from datetime import datetime, timezone
 
-from tros.execution.context import ExecutionContext
-from tros.execution.logging import StructuredLogger, Timer, get_structured_logger
-from tros.execution.errors import (
-    MissionError, ValidationError, ConstraintViolationError,
-    ToolExecutionError, AtlasError, AtlasTimeoutError,
-    LLMError, LLMTimeoutError, RecoveryError,
-    RecommendationError, CancellationError, InternalMissionError,
-)
-from tros.execution.lifecycle import (
-    ExecutionStatus, is_valid_transition, validate_transition,
-)
+import pytest
+
 from tros.execution.cancellation import CancellationToken
-from tros.execution.retry import execute_with_retry
+from tros.execution.context import ExecutionContext
+from tros.execution.errors import (
+    AtlasError,
+    AtlasTimeoutError,
+    CancellationError,
+    ConstraintViolationError,
+    InternalMissionError,
+    LLMError,
+    LLMTimeoutError,
+    MissionError,
+    RecommendationError,
+    RecoveryError,
+    ToolExecutionError,
+    ValidationError,
+)
+from tros.execution.health import HealthReport, check_health
+from tros.execution.idempotency import IdempotencyStore
+from tros.execution.lifecycle import (
+    ExecutionStatus,
+    is_valid_transition,
+    validate_transition,
+)
+from tros.execution.logging import StructuredLogger, Timer
 from tros.execution.performance import PerformanceMetrics, PerfTimer
-from tros.execution.idempotency import IdempotencyStore, IdempotencyEntry
-from tros.execution.health import check_health, HealthStatus, HealthReport
-from tros.service.result import MissionResult, FlightInfo, RecoveryInfo, ConflictInfo
+from tros.execution.retry import execute_with_retry
 from tros.service.mission_service import MissionService
+from tros.service.result import FlightInfo, MissionResult
 from tros.state.mission_state import SharedMissionState
-
 
 # =====================================================================
 # 1. ExecutionContext
@@ -545,13 +555,12 @@ class TestSecurityRegression:
 
     def test_no_subprocess_in_recovery_engine(self):
         """RecoveryEngine never calls subprocess directly."""
-        import subprocess
         from tros.agents.recovery.engine import RecoveryEngine
         engine = RecoveryEngine(tool_executor=MagicMock(), max_attempts=1)
         state = SharedMissionState(mission_id="sec-test")
-        from tros.llm.evidence import EvidenceBundle
         from tros.agents.conflict_detector import ConflictReport
         from tros.agents.flight.recommendation_validator import ValidationResult
+        from tros.llm.evidence import EvidenceBundle
         with patch("subprocess.run") as mock_sub:
             engine.run(
                 conflict_report=ConflictReport(),

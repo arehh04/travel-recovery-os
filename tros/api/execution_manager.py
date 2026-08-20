@@ -30,16 +30,15 @@ import json
 import logging
 import queue
 import threading
-import time
-from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError as FuturesTimeoutError
+from concurrent.futures import Future, ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 from tros.execution.cancellation import CancellationToken
 from tros.execution.context import ExecutionContext
 from tros.execution.errors import MissionError
-from tros.llm.client import LLMClient
 from tros.service.mission_service import MissionService
 from tros.service.result import MissionResult
 
@@ -82,18 +81,17 @@ class MissionExecution:
     status: str = "PENDING"
     phase: str = ""
     progress: float = 0.0
-    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    completed_at: Optional[datetime] = None
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    completed_at: datetime | None = None
     cancellation_token: CancellationToken = field(default_factory=CancellationToken)
-    result: Optional[MissionResult] = None
-    error: Optional[str] = None
+    result: MissionResult | None = None
+    error: str | None = None
     events: queue.Queue = field(default_factory=queue.Queue)
     _request_hash: str = ""
 
 
 class QueueFullError(Exception):
     """Raised when the execution queue is full."""
-    pass
 
 
 class ExecutionManager:
@@ -223,7 +221,7 @@ class ExecutionManager:
 
         return execution
 
-    def get_execution(self, mission_id: str) -> Optional[MissionExecution]:
+    def get_execution(self, mission_id: str) -> MissionExecution | None:
         """Get a mission execution tracker by ID."""
         with self._lock:
             return self._missions.get(mission_id)
@@ -258,13 +256,13 @@ class ExecutionManager:
         self._executor.shutdown(wait=wait, cancel_futures=not wait)
         logger.info("ExecutionManager shutdown complete")
 
-    def cleanup_completed(self, ttl_sec: Optional[int] = None) -> int:
+    def cleanup_completed(self, ttl_sec: int | None = None) -> int:
         """Remove completed/failed/cancelled missions older than TTL.
 
         Returns the number of missions removed.
         """
         ttl = ttl_sec if ttl_sec is not None else self._idempotency_ttl
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         removed = 0
 
         with self._lock:
@@ -349,7 +347,7 @@ class ExecutionManager:
                 execution.status = "FAILED"
                 execution.phase = "COMPLETED"
                 execution.progress = 1.0
-                execution.completed_at = datetime.now(timezone.utc)
+                execution.completed_at = datetime.now(UTC)
                 execution.error = f"Mission timed out after {self._mission_timeout}s"
                 self._emit_event(execution, "mission.failed", {
                     "mission_id": execution.mission_id,
@@ -367,7 +365,7 @@ class ExecutionManager:
                 execution.status = "CANCELLED"
                 execution.phase = "COMPLETED"
                 execution.progress = 1.0
-                execution.completed_at = datetime.now(timezone.utc)
+                execution.completed_at = datetime.now(UTC)
                 self._emit_event(execution, "mission.cancelled", {
                     "mission_id": execution.mission_id,
                     "reason": execution.cancellation_token.reason,
@@ -378,7 +376,7 @@ class ExecutionManager:
                 execution.status = "FAILED"
                 execution.phase = "COMPLETED"
                 execution.progress = 1.0
-                execution.completed_at = datetime.now(timezone.utc)
+                execution.completed_at = datetime.now(UTC)
                 execution.error = "Mission execution failed"
                 execution.result = result
                 self._emit_event(execution, "mission.failed", {
@@ -390,7 +388,7 @@ class ExecutionManager:
                 execution.status = "COMPLETED"
                 execution.phase = "COMPLETED"
                 execution.progress = 1.0
-                execution.completed_at = datetime.now(timezone.utc)
+                execution.completed_at = datetime.now(UTC)
                 execution.result = result
                 self._emit_event(execution, "mission.completed", {
                     "mission_id": execution.mission_id,
@@ -417,7 +415,7 @@ class ExecutionManager:
             execution.status = "FAILED"
             execution.phase = "COMPLETED"
             execution.progress = 1.0
-            execution.completed_at = datetime.now(timezone.utc)
+            execution.completed_at = datetime.now(UTC)
             execution.error = str(exc)
             self._emit_event(execution, "mission.failed", {
                 "mission_id": execution.mission_id,
@@ -432,7 +430,7 @@ class ExecutionManager:
             execution.status = "FAILED"
             execution.phase = "COMPLETED"
             execution.progress = 1.0
-            execution.completed_at = datetime.now(timezone.utc)
+            execution.completed_at = datetime.now(UTC)
             execution.error = f"Internal error: {type(exc).__name__}"
             self._emit_event(execution, "mission.failed", {
                 "mission_id": execution.mission_id,
@@ -446,7 +444,7 @@ class ExecutionManager:
         event = {
             "type": event_type,
             "mission_id": execution.mission_id,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             **data,
         }
         try:

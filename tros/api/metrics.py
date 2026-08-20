@@ -9,7 +9,6 @@ from __future__ import annotations
 import threading
 import time
 from collections import deque
-from typing import Optional
 
 
 class MetricsCollector:
@@ -114,7 +113,7 @@ class MetricsCollector:
 
 
 # Module-level singleton
-_collector: Optional[MetricsCollector] = None
+_collector: MetricsCollector | None = None
 
 
 def get_metrics_collector() -> MetricsCollector:

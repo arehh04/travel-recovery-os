@@ -2,9 +2,6 @@
 
 import json
 import logging
-import io
-
-import pytest
 
 from tros.api.structured_logging import (
     SecretScrubberFilter,

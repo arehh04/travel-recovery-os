@@ -1,7 +1,6 @@
 """Tests for flight ranking logic."""
 
-import pytest
-from tros.agents.flight.ranking import rank_candidates, _parse_time_to_minutes
+from tros.agents.flight.ranking import _parse_time_to_minutes, rank_candidates
 from tros.schemas.flight import FlightCandidate
 
 

@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -45,9 +44,9 @@ class TravelerProfile(BaseModel):
     """Immutable traveler information."""
     traveler_type: TravelerType = TravelerType.BUSINESS
     name: str = "Traveler"
-    airline_preference: Optional[str] = None
-    seat_preference: Optional[str] = None
-    loyalty_program: Optional[str] = None
+    airline_preference: str | None = None
+    seat_preference: str | None = None
+    loyalty_program: str | None = None
 
 
 class DisruptionEvent(BaseModel):
@@ -55,11 +54,11 @@ class DisruptionEvent(BaseModel):
     disruption_type: DisruptionType
     origin: str = Field(..., min_length=3, max_length=3)
     destination: str = Field(..., min_length=3, max_length=3)
-    original_flight_number: Optional[str] = None
-    original_departure: Optional[str] = None
-    original_arrival: Optional[str] = None
-    booking_reference: Optional[str] = None
-    airline: Optional[str] = None
+    original_flight_number: str | None = None
+    original_departure: str | None = None
+    original_arrival: str | None = None
+    booking_reference: str | None = None
+    airline: str | None = None
     description: str = ""
 
 
@@ -72,12 +71,12 @@ class MissionContext(BaseModel):
     traveler: TravelerProfile = Field(default_factory=TravelerProfile)
     disruption: DisruptionEvent
     budget_limit: float = 1000.0
-    arrival_constraint: Optional[str] = None  # e.g. "Before 21:00"
+    arrival_constraint: str | None = None  # e.g. "Before 21:00"
 
 
 class AuditEntry(BaseModel):
     """Immutable audit trail entry."""
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     agent: str
     action: str
     previous_version: int = 0

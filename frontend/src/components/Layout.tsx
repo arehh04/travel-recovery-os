@@ -1,6 +1,7 @@
 /** Shared layout — TopAppBar + BottomNav wrapping all pages. */
 
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
+import { DevTools } from './DevTools';
 
 const LOGO_SRC = '/Navires-logo.png';
 const BRAND_NAME = 'Navires';
@@ -118,6 +119,9 @@ export function Layout() {
           ))}
         </nav>
       )}
+
+      {/* Dev Tools Widget */}
+      <DevTools />
     </div>
   );
 }

@@ -13,10 +13,8 @@ or Atlas adapter.
 from __future__ import annotations
 
 import re
-from typing import Optional
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, Header, HTTPException
 
 from tros.api.auth import AuthContext, require_auth
 from tros.api.deps import get_execution_manager
@@ -28,8 +26,6 @@ from tros.api.models import (
     MissionResultResponse,
     MissionStatusResponse,
 )
-from tros.api.errors import build_error_response
-from tros.execution.errors import ValidationError
 
 router = APIRouter(prefix="/api/v1/missions", tags=["missions"])
 
@@ -77,6 +73,14 @@ def _result_to_response(result) -> MissionResultResponse:
             "currency": result.recommendation.currency,
             "score": result.recommendation.score,
         }
+        
+    # Mock Gamification Data for Hackathon
+    budget_limit = result.budget.get("limit", 1000.0) if result.budget else 1000.0
+    flight_price = result.recommendation.price if result.recommendation else budget_limit
+    money_saved = round(max(0.0, budget_limit - flight_price + 150.0), 2)  # +150 for avoiding rebooking fees
+    time_saved_minutes = 210  # 3.5 hours of airport queueing avoided
+    carbon_offset_kg = 24.5  # Example eco impact
+
     return MissionResultResponse(
         mission_id=result.mission_id,
         execution_id=result.execution_id,
@@ -111,6 +115,11 @@ def _result_to_response(result) -> MissionResultResponse:
             "status": result.execution_metadata.status,
             "duration_ms": result.execution_metadata.duration_ms,
         },
+        gamification={
+            "time_saved_minutes": time_saved_minutes,
+            "money_saved": money_saved,
+            "carbon_offset_kg": carbon_offset_kg,
+        },
     )
 
 
@@ -123,7 +132,7 @@ async def create_mission(
     request: MissionRequest,
     auth: AuthContext = Depends(require_auth),
     manager: ExecutionManager = Depends(get_execution_manager),
-    idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),
+    idempotency_key: str | None = Header(None, alias="Idempotency-Key"),
 ):
     """Create and start a new mission.
 

@@ -13,13 +13,13 @@ Tests cover:
 
 from __future__ import annotations
 
-import pytest
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from tros.agents.conflict_detector import AgentConflict, ConflictReport
-from tros.agents.flight.confidence import ConfidenceFactors, calculate_confidence
 from tros.agents.flight.recommendation_validator import (
-    validate_recommendation, ValidationResult,
+    ValidationResult,
 )
 from tros.agents.recovery.engine import RecoveryEngine
 from tros.agents.recovery.models import (
@@ -28,13 +28,15 @@ from tros.agents.recovery.models import (
     RecoveryHistoryEntry,
     RecoveryResult,
 )
-from tros.config import LLM_MAX_RECOVERY_ATTEMPTS, DEFAULT_CURRENCY
+from tros.config import LLM_MAX_RECOVERY_ATTEMPTS
 from tros.llm.evidence import EvidenceBundle, build_evidence_bundle
 from tros.schemas.mission import (
-    MissionContext, DisruptionEvent, DisruptionType, TravelerProfile,
+    DisruptionEvent,
+    DisruptionType,
+    MissionContext,
+    TravelerProfile,
 )
 from tros.state.mission_state import SharedMissionState
-
 
 # =====================================================================
 # Helpers
@@ -758,7 +760,6 @@ class TestSecurity:
 
     def test_llm_cannot_execute_atlas(self):
         """RecoveryEngine only uses ToolExecutor — never subprocess."""
-        import subprocess
         mock_executor = MagicMock()
         engine = RecoveryEngine(tool_executor=mock_executor, max_attempts=2)
 
@@ -899,7 +900,6 @@ class TestIntegration:
 
     def test_config_constant_used(self):
         """LLM_MAX_RECOVERY_ATTEMPTS is configurable and used by engine."""
-        from tros.config import LLM_MAX_RECOVERY_ATTEMPTS
         assert LLM_MAX_RECOVERY_ATTEMPTS >= 1
         engine = RecoveryEngine(tool_executor=MagicMock())
         assert engine._max_attempts == LLM_MAX_RECOVERY_ATTEMPTS

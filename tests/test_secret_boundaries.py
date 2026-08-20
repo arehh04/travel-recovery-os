@@ -17,7 +17,6 @@ from fastapi.testclient import TestClient
 
 from tros.api.settings import reset_settings_cache
 
-
 # Patterns that should never appear in API responses or logs
 _SECRET_PATTERNS = [
     re.compile(r"sk-[a-zA-Z0-9]{20,}"),           # OpenAI/DeepSeek API keys
@@ -134,7 +133,10 @@ class TestErrorResponseSecrets:
 class TestLogSecrets:
     def test_deepseek_key_not_in_logs(self):
         """DEEPSEEK_API_KEY value never appears in log output."""
-        from tros.api.structured_logging import SecretScrubberFilter, StructuredFormatter
+        from tros.api.structured_logging import (
+            SecretScrubberFilter,
+            StructuredFormatter,
+        )
 
         test_logger = logging.getLogger("test_secret_log")
         test_logger.setLevel(logging.DEBUG)
@@ -151,7 +153,10 @@ class TestLogSecrets:
 
     def test_auth_secret_not_in_logs(self):
         """TR_OS_AUTH_SECRET value never appears in log output."""
-        from tros.api.structured_logging import SecretScrubberFilter, StructuredFormatter
+        from tros.api.structured_logging import (
+            SecretScrubberFilter,
+            StructuredFormatter,
+        )
 
         test_logger = logging.getLogger("test_auth_log")
         test_logger.setLevel(logging.DEBUG)
@@ -170,8 +175,9 @@ class TestLogSecrets:
 class TestSettingsValidation:
     def test_placeholder_api_key_rejected_in_production(self):
         """Settings rejects placeholder DEEPSEEK_API_KEY in production."""
-        from tros.api.settings import Settings, Environment
         from pydantic import ValidationError
+
+        from tros.api.settings import Environment, Settings
 
         with pytest.raises(ValidationError):
             Settings(
@@ -182,8 +188,9 @@ class TestSettingsValidation:
 
     def test_empty_api_key_rejected_in_production(self):
         """Settings rejects empty DEEPSEEK_API_KEY in production."""
-        from tros.api.settings import Settings, Environment
         from pydantic import ValidationError
+
+        from tros.api.settings import Environment, Settings
 
         with pytest.raises(ValidationError):
             Settings(
@@ -194,8 +201,9 @@ class TestSettingsValidation:
 
     def test_missing_atlas_token_rejected_in_production(self):
         """Settings rejects missing atlas_auth_token in production."""
-        from tros.api.settings import Settings, Environment
         from pydantic import ValidationError
+
+        from tros.api.settings import Environment, Settings
 
         with pytest.raises(ValidationError):
             Settings(
@@ -223,7 +231,7 @@ class TestFrontendBuildSecrets:
                         for pattern in _SECRET_PATTERNS:
                             if pattern.findall(content):
                                 findings.append(f"{filepath}")
-                    except (IOError, UnicodeDecodeError):
+                    except (OSError, UnicodeDecodeError):
                         pass
         assert findings == [], f"Secrets found in frontend build: {findings}"
 

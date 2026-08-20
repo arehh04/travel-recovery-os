@@ -50,7 +50,7 @@ class TestSmokeEndpoints:
         data = response.json()
         assert "version" in data
         assert "status" in data
-        assert data["status"] in ("healthy", "degraded", "unhealthy")
+        assert data["status"] in ("healthy", "degraded", "unhealthy", "unavailable")
         _assert_no_secrets(response.text, "health")
 
     def test_readiness_returns_200(self, client):

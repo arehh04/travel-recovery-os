@@ -132,7 +132,6 @@ def _make_mission_context(budget_limit: float = 1000.0) -> dict:
         "origin": "KUL",
         "destination": "NRT",
         "departure_date": "2026-08-20",
-        "traveler_count": 1,
         "currency": "USD",
         "budget_limit": budget_limit,
     }

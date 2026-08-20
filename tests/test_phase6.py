@@ -132,6 +132,7 @@ def _make_mission_context(budget_limit: float = 1000.0) -> dict:
         "origin": "KUL",
         "destination": "NRT",
         "departure_date": "2026-08-20",
+        "traveler_count": 1,
         "currency": "USD",
         "budget_limit": budget_limit,
     }
@@ -846,6 +847,7 @@ class TestIntegration:
             "original_flight_number": "MH318",
             "budget_limit": 1000.0,
             "traveler_type": "Business",
+            "traveler_count": 1,
         }
         result = supervisor.run_mission(state, raw_input)
         # Mission should complete regardless of recovery
@@ -865,6 +867,7 @@ class TestIntegration:
             "original_flight_number": "MH318",
             "budget_limit": 1000.0,
             "traveler_type": "Business",
+            "traveler_count": 1,
         }
         result = supervisor.run_mission(state, raw_input)
         # Mission completes — recovery may or may not have been triggered

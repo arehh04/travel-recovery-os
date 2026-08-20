@@ -71,6 +71,7 @@ class MissionContext(BaseModel):
     traveler: TravelerProfile = Field(default_factory=TravelerProfile)
     disruption: DisruptionEvent
     budget_limit: float = 1000.0
+    traveler_count: int = 1
     arrival_constraint: str | None = None  # e.g. "Before 21:00"
 
 

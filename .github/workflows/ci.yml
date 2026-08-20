@@ -12,6 +12,7 @@ env:
   TR_OS_AUTH_MODE: dev
   DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
   TR_OS_AUTH_SECRET: ${{ secrets.TR_OS_AUTH_SECRET }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint:

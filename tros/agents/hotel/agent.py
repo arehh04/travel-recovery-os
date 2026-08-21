@@ -13,7 +13,6 @@ from tros.agents.base import BaseAgent
 from tros.schemas.agent_output import AgentOutput, AgentStatus
 from tros.state.mission_state import SharedMissionState
 
-
 # Airport partner distress hotel chains with shuttle logistics
 AIRPORT_HOTEL_INVENTORY: dict[str, list[dict[str, Any]]] = {
     "KUL": [

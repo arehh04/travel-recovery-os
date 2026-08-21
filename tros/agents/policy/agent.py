@@ -76,7 +76,6 @@ class PolicyAgent(BaseAgent):
 
         # Determine Applicable Regulation
         is_eu_uk = origin in EU_UK_AIRPORTS or destination in EU_UK_AIRPORTS
-        is_us = origin in US_AIRPORTS or destination in US_AIRPORTS
         is_my = origin in MY_AIRPORTS or destination in MY_AIRPORTS
 
         claims = []
@@ -159,7 +158,7 @@ class PolicyAgent(BaseAgent):
         primary_claim = claims[0]
 
         # Generate formal Legal Claim Notice Letter
-        now_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        now_str = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
         claim_letter_text = (
             f"FORMAL NOTICE OF COMPENSATION CLAIM\n"
             f"Date: {now_str}\n"

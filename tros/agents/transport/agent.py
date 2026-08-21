@@ -13,7 +13,6 @@ from tros.agents.base import BaseAgent
 from tros.schemas.agent_output import AgentOutput, AgentStatus
 from tros.state.mission_state import SharedMissionState
 
-
 # Known high-speed rail and intermodal city pairs
 INTERMODAL_RAIL_CORRIDORS: dict[tuple[str, str], dict[str, Any]] = {
     ("LHR", "CDG"): {

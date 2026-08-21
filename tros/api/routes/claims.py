@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import datetime
 import hashlib
-from typing import Any
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
+from fastapi import APIRouter
+from pydantic import BaseModel
 
 from tros.api.db import get_connection, init_db
 
@@ -71,7 +70,7 @@ def get_claim_for_mission(mission_id: str) -> ClaimResponse:
             amount = 450.0
             curr = "USD"
 
-        now_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        now_str = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
         claim_id = f"CLM-{hashlib.md5(mission_id.encode()).hexdigest()[:8].upper()}"
         claim_letter = (
             f"FORMAL NOTICE OF COMPENSATION CLAIM ({claim_id})\n"
@@ -104,7 +103,16 @@ def file_claim(mission_id: str) -> ClaimResponse:
     claim = get_claim_for_mission(mission_id)
     conn = get_connection()
     try:
-        now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        now_iso = datetime.datetime.now(datetime.UTC).isoformat()
+        # Ensure mission exists in missions table
+        m_check = conn.execute("SELECT 1 FROM missions WHERE mission_id = ?", (mission_id,)).fetchone()
+        if not m_check:
+            conn.execute(
+                """INSERT OR IGNORE INTO missions 
+                   (mission_id, origin, destination, departure_date, status, created_at, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (mission_id, "LHR", "JFK", datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d"), "COMPLETED", now_iso, now_iso),
+            )
         conn.execute(
             """INSERT OR REPLACE INTO claims 
                (id, mission_id, regulation, statutory_tier, amount, currency, status, claim_letter, created_at)

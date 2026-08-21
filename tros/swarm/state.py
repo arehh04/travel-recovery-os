@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import copy
 import operator
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any
+
 from typing_extensions import TypedDict
 
 
@@ -19,7 +20,7 @@ class DisruptionEvent(TypedDict):
     original_flight: str
     disruption_type: str  # 'CANCELLED', 'DELAY_MISSED_CONN', etc.
     delay_minutes: int
-    affected_passengers: List[str]
+    affected_passengers: list[str]
 
 
 class CandidateRoute(TypedDict):
@@ -41,17 +42,17 @@ class AgentSwarmState(TypedDict):
     """
 
     disruption: DisruptionEvent
-    passenger_context: Dict[str, Any]
-    inventory_candidates: Annotated[List[CandidateRoute], operator.add]
-    selected_solution: Optional[CandidateRoute]
+    passenger_context: dict[str, Any]
+    inventory_candidates: Annotated[list[CandidateRoute], operator.add]
+    selected_solution: CandidateRoute | None
     human_consensus_status: str  # 'PENDING', 'APPROVED', 'REJECTED'
-    execution_receipt: Optional[Dict[str, Any]]
-    agent_logs: Annotated[List[str], operator.add]
+    execution_receipt: dict[str, Any] | None
+    agent_logs: Annotated[list[str], operator.add]
 
 
 def create_initial_swarm_state(
     disruption: DisruptionEvent,
-    passenger_context: Optional[Dict[str, Any]] = None,
+    passenger_context: dict[str, Any] | None = None,
 ) -> AgentSwarmState:
     """Create a new initialized AgentSwarmState."""
     return {
@@ -67,7 +68,7 @@ def create_initial_swarm_state(
 
 def apply_swarm_update(
     current_state: AgentSwarmState,
-    update: Dict[str, Any],
+    update: dict[str, Any],
 ) -> AgentSwarmState:
     """Merge a partial state update into the current AgentSwarmState.
 

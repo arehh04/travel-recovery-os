@@ -1,20 +1,18 @@
 """Tests for TR-OS Agent Swarm Architecture."""
 
 import asyncio
+
 import pytest
 from starlette.testclient import TestClient
 
 from tros.api.app import create_app
 from tros.swarm import (
-    AgentSwarmState,
     AlliancePartnerScout,
     CandidateRoute,
     ContextWorker,
     CriticRankingWorker,
     DirectFlightScout,
     DisruptionEvent,
-    ExecutionWorker,
-    HumanConsensusWorker,
     IntermodalScout,
     SwarmOrchestrator,
     apply_swarm_update,

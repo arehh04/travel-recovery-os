@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
 from tros.swarm.orchestrator import SwarmOrchestrator
-from tros.swarm.state import AgentSwarmState, CandidateRoute, DisruptionEvent
+from tros.swarm.state import DisruptionEvent
 
 router = APIRouter(prefix="/api/v1/swarm", tags=["swarm"])
 _orchestrator = SwarmOrchestrator()
@@ -18,22 +19,22 @@ class SwarmRunRequest(BaseModel):
     original_flight: str = Field(..., json_schema_extra={"example": "BA100"})
     disruption_type: str = Field(default="CANCELLED", json_schema_extra={"example": "CANCELLED"})
     delay_minutes: int = Field(default=240, json_schema_extra={"example": 240})
-    affected_passengers: List[str] = Field(default_factory=lambda: ["Alice Smith"])
-    passenger_context: Optional[Dict[str, Any]] = None
+    affected_passengers: list[str] = Field(default_factory=lambda: ["Alice Smith"])
+    passenger_context: dict[str, Any] | None = None
     auto_execute: bool = Field(default=False, description="Auto-execute if consensus is APPROVED")
 
 
 class SwarmApproveRequest(BaseModel):
-    state: Dict[str, Any]
+    state: dict[str, Any]
 
 
 class SwarmRejectRequest(BaseModel):
-    state: Dict[str, Any]
+    state: dict[str, Any]
     reason: str = Field(default="Declined by passenger")
 
 
-@router.post("/run", response_model=Dict[str, Any])
-async def run_swarm(request: SwarmRunRequest) -> Dict[str, Any]:
+@router.post("/run", response_model=dict[str, Any])
+async def run_swarm(request: SwarmRunRequest) -> dict[str, Any]:
     """Execute the multi-agent swarm on a disruption event."""
     disruption: DisruptionEvent = {
         "pnr": request.pnr,
@@ -51,15 +52,15 @@ async def run_swarm(request: SwarmRunRequest) -> Dict[str, Any]:
     return result
 
 
-@router.post("/approve", response_model=Dict[str, Any])
-async def approve_swarm(request: SwarmApproveRequest) -> Dict[str, Any]:
+@router.post("/approve", response_model=dict[str, Any])
+async def approve_swarm(request: SwarmApproveRequest) -> dict[str, Any]:
     """Approve a PENDING recovery option and execute booking."""
     result = await _orchestrator.approve_and_execute(request.state)  # type: ignore[arg-type]
     return result
 
 
-@router.post("/reject", response_model=Dict[str, Any])
-async def reject_swarm(request: SwarmRejectRequest) -> Dict[str, Any]:
+@router.post("/reject", response_model=dict[str, Any])
+async def reject_swarm(request: SwarmRejectRequest) -> dict[str, Any]:
     """Reject a recovery option."""
     result = await _orchestrator.reject(request.state, reason=request.reason)  # type: ignore[arg-type]
     return result

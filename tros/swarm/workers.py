@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime
 import uuid
-from typing import Any, Dict, List
+from typing import Any
 
 from tros.swarm.state import AgentSwarmState, CandidateRoute
 
@@ -19,7 +19,7 @@ class ContextWorker:
 
     NAME = "ContextWorker"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         disruption = state["disruption"]
         pnr = disruption.get("pnr", "UNKNOWN")
         passengers = disruption.get("affected_passengers", ["Passenger 1"])
@@ -49,10 +49,10 @@ class DirectFlightScout:
 
     NAME = "DirectFlightScout"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         disruption = state["disruption"]
         carrier = disruption.get("original_flight", "BA100")[:2]
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
 
         # Generate direct candidate flights
         dep_1 = (now + datetime.timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -60,7 +60,7 @@ class DirectFlightScout:
         dep_2 = (now + datetime.timedelta(hours=4)).strftime("%Y-%m-%dT%H:%M:%SZ")
         arr_2 = (now + datetime.timedelta(hours=11)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        candidates: List[CandidateRoute] = [
+        candidates: list[CandidateRoute] = [
             {
                 "flight_number": f"{carrier}112",
                 "departure_time": dep_1,
@@ -91,19 +91,19 @@ class AlliancePartnerScout:
 
     NAME = "AlliancePartnerScout"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         disruption = state["disruption"]
         original = disruption.get("original_flight", "BA100")
         carrier = original[:2]
 
         # Determine partner alliance
         partner_carrier = "AA" if carrier == "BA" else ("DL" if carrier == "AF" else "UA")
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
 
         dep_time = (now + datetime.timedelta(hours=3)).strftime("%Y-%m-%dT%H:%M:%SZ")
         arr_time = (now + datetime.timedelta(hours=10, minutes=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        candidates: List[CandidateRoute] = [
+        candidates: list[CandidateRoute] = [
             {
                 "flight_number": f"{partner_carrier}890",
                 "departure_time": dep_time,
@@ -126,12 +126,12 @@ class IntermodalScout:
 
     NAME = "IntermodalScout"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
-        now = datetime.datetime.now(datetime.timezone.utc)
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
+        now = datetime.datetime.now(datetime.UTC)
         dep_time = (now + datetime.timedelta(hours=5)).strftime("%Y-%m-%dT%H:%M:%SZ")
         arr_time = (now + datetime.timedelta(hours=12)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        candidates: List[CandidateRoute] = [
+        candidates: list[CandidateRoute] = [
             {
                 "flight_number": "TRAIN-AIR-704",
                 "departure_time": dep_time,
@@ -154,7 +154,7 @@ class CriticRankingWorker:
 
     NAME = "CriticRankingWorker"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         candidates = state.get("inventory_candidates", [])
         if not candidates:
             log = f"[{self.NAME}] No candidate routes available to evaluate."
@@ -166,7 +166,7 @@ class CriticRankingWorker:
         passenger_ctx = state.get("passenger_context", {})
         preferred_carrier = passenger_ctx.get("preferred_carrier", "")
 
-        scored_candidates: List[CandidateRoute] = []
+        scored_candidates: list[CandidateRoute] = []
         for cand in candidates:
             c = dict(cand)
             # Recompute weighted multi-criteria score
@@ -201,7 +201,7 @@ class HumanConsensusWorker:
 
     NAME = "HumanConsensusWorker"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         best = state.get("selected_solution")
         if not best:
             log = f"[{self.NAME}] No solution selected. Setting consensus to REJECTED."
@@ -231,7 +231,7 @@ class ExecutionWorker:
 
     NAME = "ExecutionWorker"
 
-    async def run(self, state: AgentSwarmState) -> Dict[str, Any]:
+    async def run(self, state: AgentSwarmState) -> dict[str, Any]:
         consensus = state.get("human_consensus_status")
         if consensus != "APPROVED":
             log = f"[{self.NAME}] Consensus status is {consensus}. Execution blocked."
@@ -261,7 +261,7 @@ class ExecutionWorker:
             "arrival_time": solution["arrival_time"],
             "e_ticket_number": e_ticket,
             "status": "CONFIRMED",
-            "booked_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "booked_at": datetime.datetime.now(datetime.UTC).isoformat(),
             "cost_incurred": max(0.0, solution["price_differential"]),
         }
 

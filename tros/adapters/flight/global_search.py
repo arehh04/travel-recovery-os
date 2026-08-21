@@ -6,11 +6,9 @@ alliance codeshares, cabin classes, and layover connections.
 
 from __future__ import annotations
 
-import datetime
 import hashlib
 import random
 from typing import Any
-
 
 # Major global airline hubs and carriers
 AIRPORT_HUBS: dict[str, dict[str, Any]] = {

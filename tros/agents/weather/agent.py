@@ -7,13 +7,11 @@ and ground-stop delay probabilities across origin, hub, and destination airports
 from __future__ import annotations
 
 import hashlib
-import random
 from typing import Any
 
 from tros.agents.base import BaseAgent
 from tros.schemas.agent_output import AgentOutput, AgentStatus
 from tros.state.mission_state import SharedMissionState
-
 
 # Airport climate profiles for realistic deterministic simulation
 AIRPORT_WEATHER_PROFILES: dict[str, dict[str, Any]] = {

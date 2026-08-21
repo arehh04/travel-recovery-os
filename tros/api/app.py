@@ -138,10 +138,10 @@ def create_app() -> FastAPI:
             },
         )
 
-    from tros.api.routes.webhooks import router as webhooks_router
-    from tros.api.routes.swarm import router as swarm_router
-    from tros.api.routes.profile import router as profile_router
     from tros.api.routes.claims import router as claims_router
+    from tros.api.routes.profile import router as profile_router
+    from tros.api.routes.swarm import router as swarm_router
+    from tros.api.routes.webhooks import router as webhooks_router
     # --- Routes ---
     app.include_router(missions_router)
     app.include_router(health_router)

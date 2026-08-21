@@ -7,7 +7,8 @@ critic evaluation, human-in-the-loop consensus gates, and ticketing execution.
 from __future__ import annotations
 
 import asyncio
-from typing import Any, AsyncGenerator, Dict, Optional
+from collections.abc import AsyncGenerator
+from typing import Any
 
 from tros.swarm.state import (
     AgentSwarmState,
@@ -41,7 +42,7 @@ class SwarmOrchestrator:
     async def execute(
         self,
         disruption: DisruptionEvent,
-        passenger_context: Optional[Dict[str, Any]] = None,
+        passenger_context: dict[str, Any] | None = None,
         auto_execute_if_approved: bool = True,
     ) -> AgentSwarmState:
         """Run the complete agent swarm pipeline synchronously/asynchronously."""
@@ -104,8 +105,8 @@ class SwarmOrchestrator:
     async def stream(
         self,
         disruption: DisruptionEvent,
-        passenger_context: Optional[Dict[str, Any]] = None,
-    ) -> AsyncGenerator[Dict[str, Any], None]:
+        passenger_context: dict[str, Any] | None = None,
+    ) -> AsyncGenerator[dict[str, Any], None]:
         """Stream step-by-step state progress for real-time UI/SSE rendering."""
         state = create_initial_swarm_state(disruption, passenger_context)
         yield {"step": "INITIALIZED", "state": state}

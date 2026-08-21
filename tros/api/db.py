@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS claims (
     currency TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'FILED_PENDING_REVIEW',
     claim_letter TEXT NOT NULL,
-    created_at TEXT NOT NULL,
-    FOREIGN KEY(mission_id) REFERENCES missions(mission_id)
+    created_at TEXT NOT NULL
 );
 """
+

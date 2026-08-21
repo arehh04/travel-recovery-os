@@ -25,9 +25,9 @@ from tros.agents.flight import FlightAgent
 from tros.agents.hotel import HotelAgent
 from tros.agents.policy import PolicyAgent
 from tros.agents.reflection import ReflectionAgent
+from tros.agents.summary import SummaryAgent
 from tros.agents.transport import TransportAgent
 from tros.agents.weather import WeatherAgent
-from tros.agents.summary import SummaryAgent
 from tros.llm.tool_executor import ToolExecutor
 from tros.schemas.agent_output import AgentStatus
 from tros.schemas.mission import MissionStatus

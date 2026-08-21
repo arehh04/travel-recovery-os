@@ -44,7 +44,7 @@ def _ensure_default_profile() -> None:
     try:
         row = conn.execute("SELECT user_id FROM user_profiles WHERE user_id = 'default_user'").fetchone()
         if not row:
-            now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+            now_iso = datetime.datetime.now(datetime.UTC).isoformat()
             conn.execute(
                 """INSERT INTO user_profiles 
                    (user_id, full_name, email, phone, passport_number, nationality,
@@ -127,7 +127,7 @@ def get_profile(user_id: str = "default_user") -> UserProfileModel:
 def update_profile(profile: UserProfileModel) -> UserProfileModel:
     """Update passenger profile details."""
     conn = get_connection()
-    now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    now_iso = datetime.datetime.now(datetime.UTC).isoformat()
     try:
         conn.execute(
             """INSERT OR REPLACE INTO user_profiles 

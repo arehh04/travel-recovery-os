@@ -71,10 +71,21 @@ export function DevTools() {
           <div className="bg-surface border border-outline-variant rounded-xl shadow-lg p-2 flex flex-col gap-1 w-48 mb-2 animate-in slide-in-from-bottom-2 fade-in">
             <div className="px-3 py-1 font-label-sm text-on-surface-variant text-xs uppercase tracking-wider">Demo Tools</div>
             <button
+              onClick={() => {
+                setExpanded(false);
+                navigate('/swarm');
+              }}
+              className="text-left px-3 py-2 text-sm font-label-md rounded hover:bg-surface-container transition-colors text-primary font-semibold flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px] text-secondary">hub</span>
+              Swarm Hub
+            </button>
+            <button
               onClick={handleSimulate}
               disabled={loading}
-              className="text-left px-3 py-2 text-sm font-label-md rounded hover:bg-surface-container transition-colors disabled:opacity-50 text-secondary"
+              className="text-left px-3 py-2 text-sm font-label-md rounded hover:bg-surface-container transition-colors disabled:opacity-50 text-secondary flex items-center gap-2"
             >
+              <span className="material-symbols-outlined text-[18px]">bolt</span>
               {loading ? 'Simulating...' : 'Simulate Webhook'}
             </button>
           </div>

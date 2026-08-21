@@ -139,11 +139,17 @@ def create_app() -> FastAPI:
         )
 
     from tros.api.routes.webhooks import router as webhooks_router
+    from tros.api.routes.swarm import router as swarm_router
+    from tros.api.routes.profile import router as profile_router
+    from tros.api.routes.claims import router as claims_router
     # --- Routes ---
     app.include_router(missions_router)
     app.include_router(health_router)
     app.include_router(events_router)
     app.include_router(webhooks_router)
+    app.include_router(swarm_router)
+    app.include_router(profile_router, prefix="/api/v1")
+    app.include_router(claims_router, prefix="/api/v1")
 
     # --- Root redirect to docs ---
     @app.get("/", include_in_schema=False)

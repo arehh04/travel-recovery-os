@@ -14,7 +14,7 @@ Detail: Title found: True, Root div: True
 ============================================================
 Test 3: Create Recovery Mission (POST /missions)
 Result: PASS
-Detail: Mission ID: mission-0bf83a5ceab9, Status: PENDING
+Detail: Mission ID: mission-ab9f34cc2682, Status: RUNNING
 ============================================================
 
 ============================================================
@@ -25,12 +25,72 @@ Detail: Phase: FLIGHT_SEARCH, Progress: 0.3, Status: RUNNING
   Poll 1/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
   Poll 2/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
   Poll 3/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 4/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 5/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 6/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 7/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 8/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 9/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 10/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 11/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
-  Poll 12/30: status=RUNNING, phase=FLIGHT_SEARCH, progress=0.3
+  Poll 4/30: status=COMPLETED, phase=COMPLETED, progress=1.0
+
+============================================================
+Test 5: Get Mission Result (GET /missions/{id})
+Result: PASS
+Detail: Flight: SQ400, Carrier: Singapore Airlines, Price: 103.0, Confidence: 0.9, Alternatives: 3
+============================================================
+
+============================================================
+Test 6: Frontend Live Recovery Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 7: Frontend Recovery Plan Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 8: Frontend Evidence Validation Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 9: Frontend History Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 10: Frontend Profile Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 11: Frontend Swarm Hub Page Accessible
+Result: PASS
+Detail: Page loaded, root div: True, Vite module: True
+============================================================
+
+============================================================
+Test 12: Multi-Agent Swarm Run & Human Consensus Approval
+Result: PASS
+Detail: Candidates: 4, Selected: BA112, Post-approval status: APPROVED, Receipt status: CONFIRMED
+============================================================
+
+============================================================
+Test 13: Passenger Profile & Loyalty Persistence
+Result: PASS
+Detail: Name: Alex Mercer, Loyalty Programs: 2
+============================================================
+
+============================================================
+Test 14: Regulatory Claims Package Generation
+Result: PASS
+Detail: Reg: EU Regulation 261/2004 & UK261, Amount: EUR 600.0, Status: ELIGIBLE_READY_TO_FILE
+============================================================
+
+============================================================
+LIVE SCENARIO TEST SUMMARY
+============================================================
+  Passed: 14/14
+  Failed: 0/14
+  Total:  14/14
+============================================================

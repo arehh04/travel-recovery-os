@@ -162,6 +162,7 @@ class ExecutionManager:
                 )
 
         # Idempotency check
+        payload_hash = ""
         if idempotency_key:
             payload_hash = self._hash_payload(request)
             with self._lock:
@@ -186,7 +187,7 @@ class ExecutionManager:
             status="PENDING",
             phase="CONTEXT",
             progress=0.0,
-            _request_hash=self._hash_payload(request) if idempotency_key else "",
+            _request_hash=payload_hash if idempotency_key else "",
         )
 
         with self._lock:
@@ -214,8 +215,12 @@ class ExecutionManager:
             "execution_id": ctx.execution_id,
         })
 
+        run_request = dict(request)
+        run_request["mission_id"] = ctx.mission_id
+        run_request["execution_id"] = ctx.execution_id
+
         # Submit to background with timeout enforcement
-        future = self._executor.submit(self._run_mission, execution, request, idempotency_key)
+        future = self._executor.submit(self._run_mission, execution, run_request, idempotency_key)
         with self._lock:
             self._futures[ctx.mission_id] = future
 

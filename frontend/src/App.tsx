@@ -11,15 +11,17 @@ import { AlternativesPage } from './pages/AlternativesPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { BookingConfirmationPage } from './pages/BookingConfirmationPage';
+import { SwarmDashboardPage } from './pages/SwarmDashboardPage';
 import './styles/app.css';
 
-// TR-OS PWA Phase 10
+// TR-OS PWA Phase 10 & Multi-Agent Swarm
 
 export function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<StartRecoveryPage />} />
+        <Route path="/swarm" element={<SwarmDashboardPage />} />
         <Route path="/recovery/live" element={<LiveRecoveryPage />} />
         <Route path="/recovery/plan" element={<RecoveryPlanPage />} />
         <Route path="/recovery/engine" element={<RecoveryEnginePage />} />
@@ -33,3 +35,4 @@ export function App() {
     </Routes>
   );
 }
+

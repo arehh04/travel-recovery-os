@@ -32,3 +32,10 @@ Thumbs.db
 
 # Smoke test (contains hardcoded test data)
 smoke_test.py
+
+# Local databases and build info
+*.db
+*.sqlite3
+data/*.db
+*.tsbuildinfo
+

@@ -114,4 +114,42 @@ CREATE TABLE IF NOT EXISTS idempotency_keys (
     mission_id TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_profiles (
+    user_id TEXT PRIMARY KEY,
+    full_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    passport_number TEXT,
+    nationality TEXT,
+    seat_preference TEXT DEFAULT 'AISLE',
+    meal_preference TEXT DEFAULT 'STANDARD',
+    max_layover_hours INTEGER DEFAULT 4,
+    preferred_alliance TEXT DEFAULT 'ANY',
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS loyalty_accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    program_name TEXT NOT NULL,
+    alliance TEXT NOT NULL,
+    tier_status TEXT NOT NULL,
+    member_number TEXT NOT NULL,
+    points_balance INTEGER DEFAULT 0,
+    FOREIGN KEY(user_id) REFERENCES user_profiles(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS claims (
+    id TEXT PRIMARY KEY,
+    mission_id TEXT NOT NULL,
+    regulation TEXT NOT NULL,
+    statutory_tier TEXT NOT NULL,
+    amount REAL NOT NULL,
+    currency TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'FILED_PENDING_REVIEW',
+    claim_letter TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY(mission_id) REFERENCES missions(mission_id)
+);
 """

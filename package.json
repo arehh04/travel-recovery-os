@@ -1,0 +1,9 @@
+{
+  "name": "travel-recovery-os",
+  "private": true,
+  "version": "0.10.0",
+  "scripts": {
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "test": "npm --prefix frontend test"
+  }
+}

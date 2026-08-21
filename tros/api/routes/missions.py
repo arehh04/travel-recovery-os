@@ -13,6 +13,7 @@ or Atlas adapter.
 from __future__ import annotations
 
 import re
+from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException
 
@@ -58,7 +59,7 @@ def _validate_request(req: MissionRequest) -> None:
         })
 
 
-def _result_to_response(result) -> MissionResultResponse:
+def _result_to_response(result, mission_id: str | None = None) -> MissionResultResponse:
     """Convert a MissionResult to the API response model."""
     rec = None
     if result.recommendation:
@@ -82,7 +83,7 @@ def _result_to_response(result) -> MissionResultResponse:
     carbon_offset_kg = 24.5  # Example eco impact
 
     return MissionResultResponse(
-        mission_id=result.mission_id,
+        mission_id=mission_id or result.mission_id,
         execution_id=result.execution_id,
         status=result.status,
         recommendation=rec,
@@ -176,6 +177,39 @@ async def create_mission(
 
 
 # -------------------------------------------------------------------
+# GET /api/v1/missions (List all missions)
+# -------------------------------------------------------------------
+
+@router.get("", response_model=list[dict[str, Any]])
+async def list_missions(
+    limit: int = 50,
+    auth: AuthContext = Depends(require_auth),
+    manager: ExecutionManager = Depends(get_execution_manager),
+):
+    """List all tracked recovery missions for history and dashboard."""
+    executions = manager.get_all_missions()
+    results = []
+    for ex in executions[-limit:]:
+        rec = ex.result.recommendation if (ex.result and ex.result.recommendation) else None
+        results.append({
+            "mission_id": ex.mission_id,
+            "execution_id": ex.execution_id,
+            "status": ex.status,
+            "phase": ex.phase,
+            "progress": ex.progress,
+            "started_at": ex.started_at.isoformat(),
+            "completed_at": ex.completed_at.isoformat() if ex.completed_at else None,
+            "has_result": ex.result is not None,
+            "recommended_flight": rec.flight_number if rec else None,
+            "carrier": rec.carrier if rec else None,
+            "price": rec.price if rec else None,
+            "currency": rec.currency if rec else "USD",
+            "confidence": ex.result.confidence if ex.result else 0.0,
+        })
+    return list(reversed(results))
+
+
+# -------------------------------------------------------------------
 # GET /api/v1/missions/:mission_id
 # -------------------------------------------------------------------
 
@@ -204,7 +238,7 @@ async def get_mission(
         )
 
     if execution.result:
-        return _result_to_response(execution.result)
+        return _result_to_response(execution.result, mission_id=execution.mission_id)
 
     # Mission still running or failed — return current status as partial result
     return MissionResultResponse(

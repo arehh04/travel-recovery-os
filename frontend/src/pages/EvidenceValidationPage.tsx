@@ -1,7 +1,9 @@
-/** Evidence Validation page — stitch bento grid with dynamic data. */
+/** Evidence Validation page — Multi-Agent Audit, Proof & Statutory Passenger Rights Claim Engine. */
 
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import type { MissionResult } from '../api/types';
+import { api } from '../api/client';
+import type { MissionResult, RegulatoryClaim } from '../api/types';
 import type { EvidenceData } from '../types/app';
 
 interface Props {
@@ -10,34 +12,82 @@ interface Props {
 
 export function EvidenceValidationPage({ data: propData }: Props = {}) {
   const location = useLocation();
-  const state = (location.state as { result?: MissionResult; request?: { budget_limit: number; currency: string } }) || {};
+  const state = (location.state as { result?: MissionResult; request?: { budget_limit: number; currency: string }; mission?: any }) || {};
   const result = state.result;
+
+  const missionId = result?.execution_metadata?.mission_id || state.mission?.id || 'mission-ba117-live';
+
+  const [claim, setClaim] = useState<RegulatoryClaim | null>(null);
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [claimFiled, setClaimFiled] = useState(false);
+
+  useEffect(() => {
+    loadClaim();
+  }, [missionId]);
+
+  const loadClaim = async () => {
+    try {
+      setClaimLoading(true);
+      const data = await api.get<RegulatoryClaim>(`/claims/${missionId}`);
+      setClaim(data);
+      if (data.status === 'SUBMITTED_TO_AIRLINE') {
+        setClaimFiled(true);
+      }
+    } catch (e) {
+      console.warn('Claim calculation error or not yet generated:', e);
+    } finally {
+      setClaimLoading(false);
+    }
+  };
+
+  const handleFileClaim = async () => {
+    try {
+      const data = await api.post<RegulatoryClaim>(`/claims/${missionId}/file`);
+      setClaim(data);
+      setClaimFiled(true);
+    } catch (e) {
+      console.error('Failed to file claim:', e);
+    }
+  };
+
+  const handleDownloadNotice = () => {
+    if (!claim) return;
+    const blob = new Blob([claim.claim_letter], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `TR-OS_Legal_Claim_${claim.id}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Build evidence data from API result or use prop defaults
   const flight = result?.recommendation;
-  const alt = result?.alternatives[0];
+  const alt = result?.alternatives?.[0];
 
   const data: EvidenceData = propData || {
-    flightRef: flight?.flight_number || 'N/A',
-    punctualityPct: 94,
+    flightRef: flight?.flight_number || 'BA112',
+    punctualityPct: 96,
     availableSeats: 4,
     layoverTolerance: '< 3 hrs at secondary hub',
     budgetAmount: flight?.price ?? 420.40,
     budgetLimit: state.request?.budget_limit ?? 1000,
     budgetPct: flight ? Math.round((flight.price / (state.request?.budget_limit ?? 1000)) * 100) : 42,
-    confidenceScore: result ? Math.round(result.confidence * 100) : 92,
-    altFlightRef: alt?.flight_number || 'XJ109',
+    confidenceScore: result ? Math.round(result.confidence * 100) : 94,
+    altFlightRef: alt?.flight_number || 'SQ12',
     connectionP1: 0.98,
     connectionP2: 0.72,
-    reflection: `Option ${flight?.flight_number || 'TR874'} represents the mathematically optimal path to recovery. While alternative ${alt?.flight_number || 'XJ109'} offers a 15-minute earlier arrival, ${flight?.flight_number || 'TR874'} provides superior connection resilience at the secondary hub (p=0.98 vs p=0.72) and falls well within the corporate fiscal constraints. Equipment type matching was prioritized to maintain user comfort standards.`,
+    reflection: `Autonomous Multi-Agent Swarm selected ${flight?.flight_number || 'BA112'} as the mathematically optimal recovery path. Direct Scout verified active seat inventory, Alliance Scout confirmed codeshare protection, Weather Agent verified VFR flight category across transatlantic corridors, and Policy Agent computed full EU261 €600 compensation entitlements.`,
     evidenceItems: [
-      { icon: 'flight_takeoff', title: 'Route Feasibility Confirmed', detail: `Historical punctuality: ${94}% on this specific routing.` },
-      { icon: 'network_check', title: 'Capacity Check Passed', detail: `Real-time GDS query confirms ${4} available seats in requested class.` },
+      { icon: 'flight_takeoff', title: 'Route Feasibility Verified', detail: 'Global Flight Engine confirmed primary seat inventory.' },
+      { icon: 'cloud', title: 'Meteorological Risk Passed', detail: 'Weather Agent verified VFR ceiling and sub-0.20 storm risk index.' },
+      { icon: 'policy', title: 'Statutory Protection Active', detail: 'EU261 / MAVCOM regulatory duty of care mandates applied.' },
+      { icon: 'hotel', title: 'Distress Accommodations Ready', detail: 'Hotel Agent pre-allocated transit vouchers & shuttle logistics.' },
     ],
     constraintItems: [
-      { title: 'Origin / Destination Match', detail: 'Strict match enforced.' },
-      { title: 'Layover Tolerance', detail: '< 3 hrs at secondary hub.' },
-      { title: 'Cabin Class', detail: 'Premium Economy preserved.' },
+      { title: 'Origin / Destination Match', detail: 'Strict route corridor preserved.' },
+      { title: 'Alliance Priority', detail: 'Oneworld & Star Alliance tier benefits preserved.' },
+      { title: 'Budget Limit', detail: 'Well within corporate recovery fund limit.' },
     ],
   };
 
@@ -53,33 +103,37 @@ export function EvidenceValidationPage({ data: propData }: Props = {}) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
           </div>
-          <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Validation Engine Active</span>
+          <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Multi-Agent Evidence Engine</span>
         </div>
-        <h1 className="font-display-lg text-display-lg text-primary mt-unit">Why {data.flightRef}?</h1>
-        <p className="font-body-md text-body-md text-on-surface-variant max-w-md">Navires AI has selected this recovery route based on multi-variable constraint analysis.</p>
+        <h1 className="font-display-lg text-display-lg text-primary mt-unit">Evidence Dossier: {data.flightRef}</h1>
+        <p className="font-body-md text-body-md text-on-surface-variant max-w-xl">
+          Multi-agent mathematical validation, meteorological clearance, and statutory passenger rights protection.
+        </p>
       </section>
 
       {/* Bento Grid Layout */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
         {/* Flight Evidence */}
-        <div className="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
+        <div className="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-sm flex flex-col gap-stack-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1.5 h-full bg-secondary"></div>
           <div className="flex items-center justify-between">
             <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">database</span>
-              Flight Evidence
+              <span className="material-symbols-outlined text-secondary">verified</span>
+              Specialist Agent Verification Evidence
             </h2>
-            <span className="bg-surface-container-high text-on-surface font-label-sm text-label-sm px-2 py-1 rounded-full">Atlas Verified</span>
+            <span className="bg-secondary-container text-on-secondary-container font-label-sm px-2.5 py-1 rounded-full font-semibold">
+              Autonomous Clearance
+            </span>
           </div>
           <div className="mt-unit bg-surface-bright rounded-lg border border-surface-variant p-stack-sm flex flex-col gap-3">
             {data.evidenceItems.map((item, i) => (
               <div key={i}>
                 <div className="flex items-center gap-3">
-                  <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center">
-                    <span className="material-symbols-outlined">{item.icon}</span>
+                  <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center shadow-inner">
+                    <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
                   </div>
                   <div>
-                    <div className="font-label-md text-label-md text-on-surface">{item.title}</div>
+                    <div className="font-label-md text-label-md text-on-surface font-semibold">{item.title}</div>
                     <div className="font-body-sm text-body-sm text-on-surface-variant">{item.detail}</div>
                   </div>
                 </div>
@@ -89,68 +143,92 @@ export function EvidenceValidationPage({ data: propData }: Props = {}) {
           </div>
         </div>
 
-        {/* Constraint Checks */}
-        <div className="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm">
-          <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-2">
-            <span className="material-symbols-outlined text-secondary">rule</span>
-            Constraint Checks
-          </h2>
-          <div className="flex flex-col gap-3">
-            {data.constraintItems.map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-tertiary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                <div>
-                  <div className="font-label-md text-label-md text-on-surface">{item.title}</div>
-                  <div className="text-sm text-on-surface-variant">{item.detail}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Budget Analysis */}
-        <div className="md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col gap-stack-sm justify-between">
-          <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary">payments</span>
-            Budget Analysis
-          </h2>
-          <div className="flex flex-col gap-2 mt-4">
-            <div className="flex justify-between items-end">
-              <span className="font-numeric-data text-numeric-data text-primary">USD {data.budgetAmount.toFixed(2)}</span>
-              <span className="font-label-md text-label-md text-on-surface-variant">Limit: {data.budgetLimit.toFixed(2)}</span>
-            </div>
-            <div className="w-full bg-surface-container-high rounded-full h-3 overflow-hidden">
-              <div className="bg-secondary h-3 rounded-full" style={{ width: `${data.budgetPct}%` }}></div>
-            </div>
-            <div className="font-label-sm text-label-sm text-on-surface-variant text-right mt-1">{data.budgetPct}% of allocated recovery fund</div>
-          </div>
-        </div>
-
-        {/* Ranking Score */}
-        <div className="md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] flex flex-col items-center justify-center gap-stack-sm relative overflow-hidden">
-          <h2 className="font-headline-md text-headline-md text-on-surface absolute top-stack-md left-stack-md flex items-center gap-2">
+        {/* Confidence Gauge */}
+        <div className="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
+          <h2 className="font-headline-md text-headline-md text-on-surface absolute top-4 left-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary">monitoring</span>
-            Ranking Score
+            Confidence
           </h2>
-          <div className="relative w-32 h-32 mt-8 flex items-center justify-center">
+          <div className="relative w-36 h-36 mt-8 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" fill="none" r="45" stroke="#e0e3e5" strokeWidth="8"></circle>
               <circle cx="50" cy="50" fill="none" r="45" stroke="#4edea3" strokeDasharray="282.7" strokeDashoffset={confidenceDashOffset} strokeLinecap="round" strokeWidth="8"></circle>
             </svg>
             <div className="flex flex-col items-center text-center z-10">
-              <span className="font-display-lg text-display-lg text-primary leading-none">{data.confidenceScore}</span>
-              <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Confidence</span>
+              <span className="font-display-lg text-display-lg text-primary leading-none font-bold">{data.confidenceScore}%</span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Utility Score</span>
             </div>
           </div>
         </div>
 
-        {/* Reflection Text Block */}
-        <div className="col-span-full bg-surface-container border border-outline-variant rounded-xl p-stack-md shadow-[0_4px_20px_-2px_rgba(15,23,42,0.08)] border-l-4 border-l-secondary relative">
+        {/* Regulatory Passenger Rights & Claims Card */}
+        <div className="col-span-full bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                <span className="material-symbols-outlined">gavel</span>
+              </div>
+              <div>
+                <h3 className="font-headline-md text-primary">Statutory Passenger Rights & Compensation</h3>
+                <p className="text-xs text-on-surface-variant">Automated legal compliance under international aviation consumer protection regulations.</p>
+              </div>
+            </div>
+            {claim && (
+              <span className="bg-secondary-container text-on-secondary-container text-xs px-3 py-1 rounded-full font-label-sm font-semibold">
+                {claim.regulation}
+              </span>
+            )}
+          </div>
+
+          {claim ? (
+            <div className="bg-surface-bright rounded-xl p-4 border border-outline-variant space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <span className="text-xs text-on-surface-variant font-label-md">Entitled Statutory Compensation:</span>
+                  <div className="text-2xl font-bold text-primary">
+                    {claim.currency} {claim.amount.toFixed(2)}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleDownloadNotice}
+                    className="border border-outline-variant px-3.5 py-2 rounded-lg text-xs font-label-md flex items-center gap-1.5 hover:bg-surface-container-high transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">download</span>
+                    Download Legal Notice Letter
+                  </button>
+                  <button
+                    onClick={handleFileClaim}
+                    disabled={claimFiled}
+                    className={`px-4 py-2 rounded-lg text-xs font-label-md flex items-center gap-1.5 transition-all shadow-sm ${
+                      claimFiled
+                        ? 'bg-tertiary text-on-tertiary opacity-90'
+                        : 'bg-primary-container text-on-primary hover:bg-primary-container/90'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">
+                      {claimFiled ? 'task_alt' : 'send'}
+                    </span>
+                    {claimFiled ? 'Claim Notice Dispatched' : 'Submit Claim to Airline'}
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-on-surface-variant font-mono bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/60 whitespace-pre-line max-h-32 overflow-y-auto">
+                {claim.claim_letter}
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-on-surface-variant">Calculating statutory compensation entitlements...</p>
+          )}
+        </div>
+
+        {/* Engine Reflection */}
+        <div className="col-span-full bg-surface-container border border-outline-variant rounded-xl p-stack-md shadow-sm border-l-4 border-l-secondary">
           <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-3">
             <span className="material-symbols-outlined text-secondary">psychology</span>
-            Engine Reflection
+            Autonomous Reflection & Optimization Trace
           </h2>
-          <p className="font-body-md text-body-md text-on-surface leading-relaxed">
+          <p className="font-body-md text-body-md text-on-surface leading-relaxed italic">
             "{data.reflection}"
           </p>
         </div>

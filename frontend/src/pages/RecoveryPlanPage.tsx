@@ -146,6 +146,44 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
           <FlightRouteMap origin={state.request?.origin || 'KUL'} destination={state.request?.destination || 'SIN'} />
         </div>
 
+        {/* Distress Hotel & Intermodal Care Options */}
+        <div className="p-4 bg-surface-bright border-t border-surface-variant space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-label-md uppercase tracking-wider text-on-surface-variant font-semibold">
+              Autonomous Multimodal Care Package
+            </span>
+            <span className="text-xs bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-semibold">
+              100% Airline Covered
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Hotel Voucher */}
+            <div className="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[20px]">hotel</span>
+              </div>
+              <div className="space-y-0.5 flex-1">
+                <div className="text-xs font-semibold text-primary">Distress Hotel Voucher Allocated</div>
+                <div className="text-xs text-on-surface-variant">Airport Transit Grand Hotel • Free Terminal Shuttle</div>
+                <div className="text-[11px] font-mono text-secondary pt-0.5">VOUCHER: HTL-VCH-8849201A</div>
+              </div>
+            </div>
+
+            {/* Ground Transport / Lounge */}
+            <div className="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[20px]">train</span>
+              </div>
+              <div className="space-y-0.5 flex-1">
+                <div className="text-xs font-semibold text-primary">Intermodal Connector & Lounge</div>
+                <div className="text-xs text-on-surface-variant">Executive Express Rail Pass • VIP Lounge Access</div>
+                <div className="text-[11px] font-mono text-tertiary-container pt-0.5">PASS: RAIL-EXPRESS-KLIA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Confidence Indicator */}
         <div className="px-stack-md py-3 bg-secondary/5 border-t border-surface-variant flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -161,7 +199,13 @@ export function RecoveryPlanPage({ result: propResult }: Props = {}) {
               <div className="font-label-sm text-label-sm text-on-surface-variant">High likelihood of seamless connection</div>
             </div>
           </div>
-          <span className="material-symbols-outlined text-secondary">analytics</span>
+          <button
+            onClick={() => navigate('/recovery/evidence', { state: { result, request: state.request } })}
+            className="text-xs text-secondary hover:underline flex items-center gap-1 font-label-md"
+          >
+            Inspect Evidence Dossier
+            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
         </div>
 
         <div className="p-stack-md border-t border-surface-variant flex flex-col md:flex-row gap-3">

@@ -1,4 +1,5 @@
 """Hotel agent package."""
-from tros.agents.stubs import HotelAgent
+
+from tros.agents.hotel.agent import HotelAgent
 
 __all__ = ["HotelAgent"]

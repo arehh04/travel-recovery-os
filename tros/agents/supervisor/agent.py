@@ -25,8 +25,9 @@ from tros.agents.flight import FlightAgent
 from tros.agents.hotel import HotelAgent
 from tros.agents.policy import PolicyAgent
 from tros.agents.reflection import ReflectionAgent
-from tros.agents.stubs import TransportAgent, WeatherAgent
 from tros.agents.summary import SummaryAgent
+from tros.agents.transport import TransportAgent
+from tros.agents.weather import WeatherAgent
 from tros.llm.tool_executor import ToolExecutor
 from tros.schemas.agent_output import AgentStatus
 from tros.schemas.mission import MissionStatus
@@ -574,9 +575,9 @@ class SupervisorAgent:
                 mission_context=ctx_dict,
                 additional=(
                     f"Disruption type: {raw_input.get('disruption_type', 'unknown')}. "
-                    "Plan which specialist agents to activate. "
-                    "Skip stub agents (Hotel, Policy, Transport, Weather) that "
-                    "will return SKIPPED. Focus on agents that add real value."
+                    "Plan which specialist agents to activate from: "
+                    "FlightAgent, HotelAgent, BudgetAgent, PolicyAgent, TransportAgent, WeatherAgent. "
+                    "Activate all domain specialists relevant to solving the disruption."
                 ),
             )
 

@@ -35,4 +35,15 @@ export const api = {
       body: body ? JSON.stringify(body) : undefined,
       headers,
     }),
+  put: <T>(path: string, body?: unknown, headers?: Record<string, string>) =>
+    request<T>(path, {
+      method: 'PUT',
+      body: body ? JSON.stringify(body) : undefined,
+      headers,
+    }),
+  delete: <T>(path: string) =>
+    request<T>(path, {
+      method: 'DELETE',
+    }),
 };
+

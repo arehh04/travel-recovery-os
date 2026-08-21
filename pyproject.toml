@@ -38,3 +38,8 @@ ignore = [
     "C408",    # dict() call
     "PERF402", # list copy
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+

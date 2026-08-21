@@ -8,6 +8,7 @@ const BRAND_NAME = 'Navires';
 
 const NAV_ITEMS = [
   { label: 'Home', icon: 'home', path: '/' },
+  { label: 'Swarm', icon: 'hub', path: '/swarm' },
   { label: 'Trips', icon: 'luggage', path: '/history' },
   { label: 'Profile', icon: 'person', path: '/profile' },
 ];
